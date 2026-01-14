@@ -61,9 +61,6 @@
         public Guid? CancelledBy { get; set; }
         public DateTime? CancellationDate { get; set; }
 
-        // Navigation Properties
-        public HMS.Patient.Domain.Entities.Patient Patient { get; set; }
-        public HMS.Staff.Domain.Entities.Staff Doctor { get; set; }
         public LabTest Test { get; set; }
         public LabResult? Result { get; set; }
         public ICollection<LabSample> Samples { get; set; } = new List<LabSample>();

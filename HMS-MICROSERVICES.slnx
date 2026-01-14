@@ -45,7 +45,7 @@
   <Folder Name="/src/Services/Patient/">
     <Project Path="HMS.Patient.API/HMS.Patient.API.csproj" />
     <Project Path="HMS.Patient.Application/HMS.Patient.Application.csproj" />
-    <Project Path="HMS.Patient.Domain/HMS.Patient.Domain.csproj" />
+    <Project Path="HMS.Patient.Domain/HMS.Patient.Domain.csproj" Id="a565a073-5545-49b9-ae15-08bb4b0b0782" />
     <Project Path="HMS.Patient.Infrastructure/HMS.Patient.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/src/Services/Pharmacy/">

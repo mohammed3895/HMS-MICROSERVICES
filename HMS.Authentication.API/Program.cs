@@ -1,4 +1,12 @@
+using HMS.Authentication.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<AuthenticationDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("AuthenticationDb"),
+        b => b.MigrationsAssembly("HMS.Authentication.Infrastructure")));
 
 // Add services to the container.
 

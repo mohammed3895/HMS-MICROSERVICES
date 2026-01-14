@@ -1,4 +1,4 @@
-﻿using HospitalManagement.Laboratory.API.Enums;
+﻿using HMS.Laboratory.Domain.Enums;
 
 namespace HMS.Laboratory.Domain.Entities
 {

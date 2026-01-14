@@ -1,4 +1,6 @@
-﻿namespace HMS.Laboratory.Domain.Entities
+﻿using HMS.Laboratory.Domain.Enums;
+
+namespace HMS.Laboratory.Domain.Entities
 {
     public class LabResult
     {
@@ -38,6 +40,5 @@
 
         // Navigation
         public LabOrder Order { get; set; }
-        public ICollection<LabResultAttachment> Attachments { get; set; } = new List<LabResultAttachment>();
     }
 }

@@ -1,7 +1,6 @@
-﻿using HospitalManagement.MedicalRecords.API.Enums;
+﻿using HMS.MedicalRecords.Domain.Enums;
 
 namespace HMS.MedicalRecords.Domain.Entities
-{
 {
     public class Diagnosis
     {
@@ -15,8 +14,5 @@ namespace HMS.MedicalRecords.Domain.Entities
         public bool IsActive { get; set; }
         public DateTime? ResolvedDate { get; set; }
         public string? Notes { get; set; }
-
-        public HospitalManagement.Patient.API.Entities.Patient Patient { get; set; }
-        public HospitalManagement.Staff.API.Entities.Staff Doctor { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace HMS.Authentication.Domain.Entities
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace HMS.Authentication.Domain.Entities
 {
     public class ApplicationUser : IdentityUser<Guid>
     {
@@ -14,7 +16,6 @@
 
         // Navigation
         public UserProfile Profile { get; set; }
-        public ICollection<UserRole> UserRoles { get; set; }
-        public ICollection<LoginHistory> LoginHistories { get; set; }
+        public ICollection<LoginHistory>? LoginHistories { get; set; }
     }
 }

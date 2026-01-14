@@ -1,5 +1,4 @@
-﻿using HMS.Authentication.Domain.Entities;
-using HMS.Patient.Domain.Enums;
+﻿using HMS.Patient.Domain.Enums;
 
 namespace HMS.Patient.Domain.Entities
 {
@@ -19,9 +18,6 @@ namespace HMS.Patient.Domain.Entities
 
         // Navigation
         public ICollection<MedicalHistory> MedicalHistories { get; set; }
-        public ICollection<HMS.Appointment.Domain.Entities.Appointment> Appointments { get; set; }
         public ICollection<Allergy> Allergies { get; set; }
-        public ICollection<Prescription> Prescriptions { get; set; }
-        public ApplicationUser User { get; set; }
     }
 }

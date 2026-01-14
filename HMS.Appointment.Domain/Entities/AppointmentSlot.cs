@@ -1,4 +1,4 @@
-﻿using HospitalManagement.Appointment.API.Enums;
+﻿using HMS.Appointment.Domain.Enums;
 
 namespace HMS.Appointment.Domain.Entities
 {
@@ -14,7 +14,7 @@ namespace HMS.Appointment.Domain.Entities
         public Guid? AppointmentId { get; set; }
         public SlotStatus Status { get; set; }
 
-        public HospitalManagement.Staff.API.Entities.Staff Doctor { get; set; }
+        public HMS.Staff.Domain.Entities.Staff Doctor { get; set; }
         public Appointment Appointment { get; set; }
     }
 }

@@ -14,9 +14,6 @@ namespace HMS.Pharamcy.Dimain.Entities
         public string? Instructions { get; set; }
         public string? Notes { get; set; }
         public Guid? DispensedBy { get; set; }
-
-        public HMS.Patient.Domain.Entities.Patient Patient { get; set; }
-        public HMS.Staff.Domain.Entities.Staff Doctor { get; set; }
         public ICollection<PrescriptionItem> Items { get; set; }
     }
 }

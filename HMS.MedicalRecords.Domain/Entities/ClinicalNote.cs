@@ -14,9 +14,5 @@
         public DateTime RecordedAt { get; set; }
         public bool IsFinalized { get; set; }
         public DateTime? FinalizedAt { get; set; }
-
-        public HMS.Patient.Domain.Entities.Patient Patient { get; set; }
-        public HMS.Staff.Domain.Entities.Staff Doctor { get; set; }
-        public HMS.Appointment.Domain.Entities.Appointment Appointment { get; set; }
     }
 }

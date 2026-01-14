@@ -1,4 +1,7 @@
 ﻿
+using HMS.Appointment.Domain.Enums;
+using HMS.Staff.Domain.Entities;
+
 namespace HMS.Appointment.Domain.Entities
 {
     public class Appointment
@@ -22,8 +25,7 @@ namespace HMS.Appointment.Domain.Entities
         public string? Notes { get; set; }
 
         // Navigation
-        public HospitalManagement.Patient.API.Entities.Patient Patient { get; set; }
-        public HospitalManagement.Staff.API.Entities.Staff Doctor { get; set; }
+        public HMS.Staff.Domain.Entities.Staff Doctor { get; set; }
         public Department Department { get; set; }
         public ICollection<AppointmentSlot> Slots { get; set; }
     }

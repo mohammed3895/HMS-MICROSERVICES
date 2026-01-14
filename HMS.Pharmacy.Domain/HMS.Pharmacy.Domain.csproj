@@ -7,8 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HMS.Patient.Domain\HMS.Patient.Domain.csproj" />
-    <ProjectReference Include="..\HMS.Staff.Domain\HMS.Staff.Domain.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.12" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="10.0.2" />
   </ItemGroup>
 
 </Project>

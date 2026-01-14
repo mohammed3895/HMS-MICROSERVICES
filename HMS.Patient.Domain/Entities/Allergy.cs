@@ -1,4 +1,5 @@
-﻿using HospitalManagement.Common.Enums;
+﻿
+using HospitalManagement.Common.Enums;
 
 namespace HMS.Patient.Domain.Entities
 {

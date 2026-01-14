@@ -7,8 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HMS.Appointment.Domain\HMS.Appointment.Domain.csproj" />
-    <ProjectReference Include="..\HMS.Authentication.Domain\HMS.Authentication.Domain.csproj" />
     <ProjectReference Include="..\HMS.Common\HMS.Common.csproj" />
   </ItemGroup>
 

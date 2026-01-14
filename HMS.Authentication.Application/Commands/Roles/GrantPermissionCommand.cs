@@ -1,0 +1,10 @@
+﻿using MediatR;
+
+namespace HMS.Authentication.Application.Commands.Roles
+{
+    public class GrantPermissionCommand : IRequest<Result<Unit>>
+    {
+        public Guid RoleId { get; set; }
+        public string Permission { get; set; }
+    }
+}

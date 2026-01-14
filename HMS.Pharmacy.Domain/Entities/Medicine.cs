@@ -17,6 +17,5 @@
         public bool IsActive { get; set; }
 
         public ICollection<Prescription> Prescriptions { get; set; }
-        public ICollection<InventoryTransaction> Transactions { get; set; }
     }
 }

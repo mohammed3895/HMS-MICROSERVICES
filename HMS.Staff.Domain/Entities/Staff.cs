@@ -1,5 +1,4 @@
-﻿using HMS.Authentication.Domain.Entities;
-using HMS.Staff.Domain.Enums;
+﻿using HMS.Staff.Domain.Enums;
 
 namespace HMS.Staff.Domain.Entities
 {
@@ -25,6 +24,5 @@ namespace HMS.Staff.Domain.Entities
         public Specialization? Specialization { get; set; }
         public ICollection<StaffSchedule> Schedules { get; set; }
         public ICollection<StaffLeave> Leaves { get; set; }
-        public ApplicationUser User { get; set; }
     }
 }
