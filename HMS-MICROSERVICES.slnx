@@ -1,0 +1,67 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Services/" />
+  <Folder Name="/src/Services/Appointment/">
+    <Project Path="HMS.Appointment.API/HMS.Appointment.API.csproj" />
+    <Project Path="HMS.Appointment.Application/HMS.Appointment.Application.csproj" />
+    <Project Path="HMS.Appointment.Domain/HMS.Appointment.Domain.csproj" />
+    <Project Path="HMS.Appointment.Infrastructure/HMS.Appointment.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Services/Authentication/">
+    <Project Path="HMS.Authentication.API/HMS.Authentication.API.csproj" />
+    <Project Path="HMS.Authentication.Application/HMS.Authentication.Application.csproj" />
+    <Project Path="HMS.Authentication.Domain/HMS.Authentication.Domain.csproj" />
+    <Project Path="HMS.Authentication.Infrastructure/HMS.Authentication.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Services/Billing/">
+    <Project Path="HMS.Billing.API/HMS.Billing.API.csproj" />
+    <Project Path="HMS.Billing.Application/HMS.Billing.Application.csproj" />
+    <Project Path="HMS.Billing.Domain/HMS.Billing.Domain.csproj" />
+    <Project Path="HMS.Billing.Infrastructure/HMS.Billing.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Services/Doctor/">
+    <Project Path="HMS.Doctor.API/HMS.Doctor.API.csproj" />
+    <Project Path="HMS.Doctor.Application/HMS.Doctor.Application.csproj" />
+    <Project Path="HMS.Doctor.Domain/HMS.Doctor.Domain.csproj" />
+    <Project Path="HMS.Doctor.Infrastructure/HMS.Doctor.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Services/Laboratory/">
+    <Project Path="HMS.Laboratory.API/HMS.Laboratory.API.csproj" />
+    <Project Path="HMS.Laboratory.Application/HMS.Laboratory.Application.csproj" />
+    <Project Path="HMS.Laboratory.Domain/HMS.Laboratory.Domain.csproj" />
+    <Project Path="HMS.Laboratory.Infrastructure/HMS.Laboratory.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Services/MedicalRecords/">
+    <Project Path="HMS.MedicalRecords.Application/HMS.MedicalRecords.Application.csproj" Id="1ee3183c-9a4a-4d79-9339-8bf3ed119e02" />
+    <Project Path="HMS.MedicalRecords.Domain/HMS.MedicalRecords.Domain.csproj" Id="0b1ebea3-1fc8-4fd9-b0e8-d1a98134aa37" />
+    <Project Path="HMS.MedicalRecords.Infrastructure/HMS.MedicalRecords.Infrastructure.csproj" Id="5adc9076-5e26-471b-9757-0b025abddc6b" />
+  </Folder>
+  <Folder Name="/src/Services/Notification/">
+    <Project Path="HMS.Notification.API/HMS.Notification.API.csproj" />
+    <Project Path="HMS.Notification.Application/HMS.Notification.Application.csproj" />
+    <Project Path="HMS.Notification.Domain/HMS.Notification.Domain.csproj" />
+    <Project Path="HMS.Notification.Infrastructure/HMS.Notification.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Services/Patient/">
+    <Project Path="HMS.Patient.API/HMS.Patient.API.csproj" />
+    <Project Path="HMS.Patient.Application/HMS.Patient.Application.csproj" />
+    <Project Path="HMS.Patient.Domain/HMS.Patient.Domain.csproj" />
+    <Project Path="HMS.Patient.Infrastructure/HMS.Patient.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Services/Pharmacy/">
+    <Project Path="HMS.Pharmacy.API/HMS.Pharmacy.API.csproj" Id="7a0da324-1903-4dd5-b6e5-c7a03cf35b64" />
+    <Project Path="HMS.Pharmacy.Application/HMS.Pharmacy.Application.csproj" Id="8d18238c-3cb1-452b-b3a5-b1c6a98ae96b" />
+    <Project Path="HMS.Pharmacy.Domain/HMS.Pharmacy.Domain.csproj" Id="6ccbaeb5-d738-41af-8364-e1553cde5bfc" />
+    <Project Path="HMS.Pharmacy.Infrastructure/HMS.Pharmacy.Infrastructure.csproj" Id="80c14435-902a-4711-b607-33a04aa6bb3e" />
+  </Folder>
+  <Folder Name="/src/Services/Staff/">
+    <Project Path="HMS.Staff.API/HMS.Staff.API.csproj" Id="2c70151e-0121-42d9-a320-b179778cd35a" />
+    <Project Path="HMS.Staff.Application/HMS.Staff.Application.csproj" Id="05564bdf-b9b7-4df0-99fd-f69d02ce73d0" />
+    <Project Path="HMS.Staff.Domain/HMS.Staff.Domain.csproj" Id="3d47f01f-ba5a-4f43-81c3-34ebf0454784" />
+    <Project Path="HMS.Staff.Infrastructure/HMS.Staff.Infrastructure.csproj" Id="c86c0a7d-bba8-4f1d-811e-87b4c90f6858" />
+  </Folder>
+  <Folder Name="/src/Shared/">
+    <Project Path="HMS.Common/HMS.Common.csproj" Id="0d94df32-f425-4250-9aca-1f8466193b9e" />
+    <Project Path="HMS.SharedKernel/HMS.SharedKernel.csproj" Id="1ac0bcd8-8e71-4044-80bb-c39e984df36c" />
+  </Folder>
+</Solution>
