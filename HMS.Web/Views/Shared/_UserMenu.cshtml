@@ -1,0 +1,31 @@
+﻿<div class="dropdown user-dropdown">
+    <button class="btn btn-link dropdown-toggle" type="button" id="userMenuDropdown" data-bs-toggle="dropdown">
+        <img src="@ViewBag.UserAvatar" alt="Avatar" class="avatar-sm" />
+        @ViewBag.UserName
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuDropdown">
+        <li>
+            <a class="dropdown-item" href="/account/profile">
+                <i class="fas fa-user"></i> Profile
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="/account/settings">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="/account/security">
+                <i class="fas fa-shield-alt"></i> Security
+            </a>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+        <li>
+            <form method="post" asp-controller="Auth" asp-action="Logout" style="display: inline;">
+                <button type="submit" class="dropdown-item">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </form>
+        </li>
+    </ul>
+</div>

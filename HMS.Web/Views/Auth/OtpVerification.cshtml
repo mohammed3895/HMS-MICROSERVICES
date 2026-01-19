@@ -1,0 +1,291 @@
+﻿@using HMS.Web.Models.ViewModels.Auth
+@model VerifyEmailViewModel
+@{
+    ViewData["Title"] = "Verify Email - Medixus Healthcare";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="~/css/auth.css">
+    <style>
+        .verify-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .verify-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: white;
+            animation: float 3s ease-in-out infinite;
+        }
+        @@keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .email-display {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: var(--radius-lg);
+            margin-bottom: 2rem;
+            text-align: center;
+            border: 2px solid var(--border);
+        }
+
+            .email-display .label {
+                font-size: 0.85rem;
+                color: var(--text-tertiary);
+                text-transform: uppercase;
+                font-weight: 600;
+                letter-spacing: 0.5px;
+                margin-bottom: 0.5rem;
+            }
+
+            .email-display .email {
+                font-size: 1.1rem;
+                color: var(--primary);
+                font-weight: 700;
+                word-break: break-all;
+            }
+
+        .resend-section {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .resend-text {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .resend-timer {
+            display: inline-block;
+            font-weight: 700;
+            color: var(--danger);
+            margin-left: 0.5rem;
+        }
+
+        .auth-content-centered {
+            max-width: 520px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-wrapper">
+        <div class="auth-container" style="max-width: 550px;">
+            <div class="auth-content auth-content-centered">
+                <div class="verify-header">
+                    <div class="verify-icon">
+                        <i class="fas fa-envelope-open-text"></i>
+                    </div>
+                    <h1>Verify Your Email</h1>
+                    <p class="auth-subtitle">Enter the 6-digit code sent to your email</p>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.Email))
+                {
+                    <div class="email-display">
+                        <div class="label">Code sent to</div>
+                        <div class="email">@Model.Email</div>
+                    </div>
+                }
+
+                <form id="verifyForm" method="post" asp-controller="Auth" asp-action="VerifyEmail">
+                    @Html.AntiForgeryToken()
+
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle"></i>
+                            <div>@TempData["Success"]</div>
+                        </div>
+                    }
+
+                    @if (!ViewData.ModelState.IsValid && ViewData.ModelState.Count > 0)
+                    {
+                        @foreach (var modelState in ViewData.ModelState.Values)
+                        {
+                            foreach (var error in modelState.Errors)
+                            {
+                                <div class="alert alert-danger">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    <div>@error.ErrorMessage</div>
+                                </div>
+                            }
+                        }
+                    }
+
+                    @if (TempData["Info"] != null)
+                    {
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            <div>@TempData["Info"]</div>
+                        </div>
+                    }
+
+                    <input type="hidden" asp-for="UserId" value="@Model.UserId">
+
+                    <div class="form-group">
+                        <label class="form-label" style="justify-content: center;">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Verification Code</span>
+                        </label>
+                        <div class="otp-inputs" id="otpInputs">
+                            <input type="text" class="otp-input" maxlength="1" inputmode="numeric" autocomplete="off" />
+                            <input type="text" class="otp-input" maxlength="1" inputmode="numeric" autocomplete="off" />
+                            <input type="text" class="otp-input" maxlength="1" inputmode="numeric" autocomplete="off" />
+                            <input type="text" class="otp-input" maxlength="1" inputmode="numeric" autocomplete="off" />
+                            <input type="text" class="otp-input" maxlength="1" inputmode="numeric" autocomplete="off" />
+                            <input type="text" class="otp-input" maxlength="1" inputmode="numeric" autocomplete="off" />
+                        </div>
+                        <input type="hidden" id="codeInput" name="Code" asp-for="OtpCode" />
+                        <span asp-validation-for="OtpCode" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block" id="verifyBtn" disabled>
+                        <i class="fas fa-check-circle"></i>
+                        <span>Verify Email</span>
+                    </button>
+
+                    <div class="resend-section">
+                        <p class="resend-text">
+                            Didn't receive the code?
+                        </p>
+                        <form method="post" asp-controller="Auth" asp-action="ResendOtp" style="display: inline;">
+                            <input type="hidden" name="email" value="@Model.Email" />
+                            <button type="submit" class="btn btn-secondary" id="resendBtn" style="width: 100%;">
+                                <i class="fas fa-redo"></i>
+                                <span id="resendText">Resend Code</span>
+                                <span class="resend-timer" id="resendTimer" style="display: none;"></span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="auth-divider">
+                        <span>Need help?</span>
+                    </div>
+
+                    <a href="/auth/login" class="btn btn-secondary btn-block">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back to Sign In</span>
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const otpInputs = document.querySelectorAll('.otp-input');
+            const codeInput = document.getElementById('codeInput');
+            const verifyBtn = document.getElementById('verifyBtn');
+            const resendBtn = document.getElementById('resendBtn');
+            const resendTimer = document.getElementById('resendTimer');
+            const resendText = document.getElementById('resendText');
+
+            // OTP Input Handler
+            otpInputs.forEach((input, index) => {
+                input.addEventListener('input', (e) => {
+                    // Only allow digits
+                    e.target.value = e.target.value.replace(/[^0-9]/g, '');
+
+                    // Auto-focus next input
+                    if (e.target.value && index < otpInputs.length - 1) {
+                        otpInputs[index + 1].focus();
+                    }
+
+                    // Update combined code
+                    updateCode();
+
+                    // Mark as filled
+                    e.target.classList.toggle('filled', !!e.target.value);
+                });
+
+                // Backspace handling
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                        otpInputs[index - 1].focus();
+                    }
+                });
+
+                // Paste handling
+                input.addEventListener('paste', (e) => {
+                    e.preventDefault();
+                    const pastedData = e.clipboardData.getData('text').replace(/[^0-9]/g, '');
+                    pastedData.split('').forEach((char, i) => {
+                        if (index + i < otpInputs.length) {
+                            otpInputs[index + i].value = char;
+                            otpInputs[index + i].classList.add('filled');
+                        }
+                    });
+                    updateCode();
+
+                    // Focus last filled input or next empty
+                    const lastIndex = Math.min(index + pastedData.length, otpInputs.length - 1);
+                    otpInputs[lastIndex].focus();
+                });
+            });
+
+            function updateCode() {
+                const code = Array.from(otpInputs).map(input => input.value).join('');
+                codeInput.value = code;
+                verifyBtn.disabled = code.length !== 6;
+            }
+
+            // Focus first input on load
+            otpInputs[0].focus();
+
+            // Resend Timer
+            function startResendTimer() {
+                let seconds = 60;
+                resendBtn.disabled = true;
+                resendText.style.display = 'none';
+                resendTimer.style.display = 'inline-block';
+
+                const interval = setInterval(() => {
+                    seconds--;
+                    resendTimer.textContent = seconds + 's';
+
+                    if (seconds === 0) {
+                        clearInterval(interval);
+                        resendBtn.disabled = false;
+                        resendText.style.display = 'inline';
+                        resendTimer.style.display = 'none';
+                    }
+                }, 1000);
+            }
+
+            // Start timer on page load
+            startResendTimer();
+
+            // Restart timer on resend
+            resendBtn.addEventListener('click', () => {
+                setTimeout(() => startResendTimer(), 100);
+            });
+        });
+    </script>
+</body>
+</html>

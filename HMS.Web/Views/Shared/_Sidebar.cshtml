@@ -1,0 +1,830 @@
+﻿@{
+    var isAuthenticated = User.Identity?.IsAuthenticated ?? false;
+    var userRole = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value ?? "Guest";
+}
+
+<aside class="sidebar">
+    <!-- Logo Section -->
+    <div class="sidebar-header">
+        <div class="logo">
+            <i class="fas fa-hospital-alt"></i>
+            <span class="logo-text">MediCare HMS</span>
+        </div>
+        <button class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <!-- User Profile -->
+    <div class="user-profile">
+        <div class="profile-image">
+            <img src="~/images/avatars/doctor-avatar.jpg" alt="User Avatar">
+            <span class="status-indicator online"></span>
+        </div>
+        <div class="profile-info">
+            <h4>Dr. Sarah Johnson</h4>
+            <p>Chief Medical Officer</p>
+        </div>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="nav-menu">
+        <div class="menu-section">
+            <p class="menu-label">MAIN NAVIGATION</p>
+
+            <a asp-controller="Dashboard" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+                <span class="badge">12</span>
+            </a>
+
+            <div class="nav-item has-submenu @(ViewContext.RouteData.Values["controller"]?.ToString() == "Patient" ? "expanded" : "")">
+                <div class="nav-link">
+                    <i class="fas fa-user-injured"></i>
+                    <span>Patients</span>
+                    <i class="fas fa-chevron-right arrow"></i>
+                </div>
+                <div class="submenu">
+                    <a asp-controller="Patient" asp-action="Index" class="submenu-item">All Patients</a>
+                    <a asp-controller="Patient" asp-action="Create" class="submenu-item">Add New Patient</a>
+                    <a asp-controller="Patient" asp-action="Admitted" class="submenu-item">Admitted Patients</a>
+                    <a asp-controller="Patient" asp-action="Discharged" class="submenu-item">Discharged</a>
+                </div>
+            </div>
+
+            <a asp-controller="Doctor" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Doctor" ? "active" : "")">
+                <i class="fas fa-user-md"></i>
+                <span>Doctors</span>
+                <span class="badge badge-primary">3</span>
+            </a>
+
+            <div class="nav-item has-submenu @(ViewContext.RouteData.Values["controller"]?.ToString() == "Appointment" ? "expanded" : "")">
+                <div class="nav-link">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Appointments</span>
+                    <i class="fas fa-chevron-right arrow"></i>
+                    <span class="badge badge-warning">8</span>
+                </div>
+                <div class="submenu">
+                    <a asp-controller="Appointment" asp-action="Index" class="submenu-item">Today's Schedule</a>
+                    <a asp-controller="Appointment" asp-action="Pending" class="submenu-item">Pending</a>
+                    <a asp-controller="Appointment" asp-action="Create" class="submenu-item">New Appointment</a>
+                    <a asp-controller="Appointment" asp-action="Calendar" class="submenu-item">Calendar View</a>
+                </div>
+            </div>
+
+            <a asp-controller="MedicalRecords" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "MedicalRecords" ? "active" : "")">
+                <i class="fas fa-file-medical"></i>
+                <span>Medical Records</span>
+            </a>
+
+            <a asp-controller="Billing" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Billing" ? "active" : "")">
+                <i class="fas fa-money-bill-wave"></i>
+                <span>Billing & Payments</span>
+                <span class="badge badge-success">$89k</span>
+            </a>
+        </div>
+
+        <div class="menu-section">
+            <p class="menu-label">DEPARTMENTS</p>
+
+            <a asp-controller="Pharmacy" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Pharmacy" ? "active" : "")">
+                <i class="fas fa-prescription-bottle-alt"></i>
+                <span>Pharmacy</span>
+                <span class="badge badge-danger">15</span>
+            </a>
+
+            <a asp-controller="Laboratory" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Laboratory" ? "active" : "")">
+                <i class="fas fa-flask"></i>
+                <span>Laboratory</span>
+                <span class="badge">42</span>
+            </a>
+
+            <a asp-controller="Radiology" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Radiology" ? "active" : "")">
+                <i class="fas fa-x-ray"></i>
+                <span>Radiology</span>
+            </a>
+
+            <a asp-controller="Emergency" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Emergency" ? "active" : "")">
+                <i class="fas fa-ambulance"></i>
+                <span>Emergency</span>
+            </a>
+        </div>
+
+        <div class="menu-section">
+            <p class="menu-label">MANAGEMENT</p>
+
+            <a asp-controller="Staff" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Staff" ? "active" : "")">
+                <i class="fas fa-users"></i>
+                <span>Staff Management</span>
+            </a>
+
+            <a asp-controller="Inventory" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Inventory" ? "active" : "")">
+                <i class="fas fa-warehouse"></i>
+                <span>Inventory</span>
+            </a>
+
+            <a asp-controller="Reports" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Reports" ? "active" : "")">
+                <i class="fas fa-chart-bar"></i>
+                <span>Reports & Analytics</span>
+            </a>
+        </div>
+
+        <div class="menu-section">
+            <p class="menu-label">PERSONAL</p>
+
+            <a asp-controller="Inbox" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Inbox" ? "active" : "")">
+                <i class="fas fa-inbox"></i>
+                <span>Inbox</span>
+                <span class="badge badge-primary">1253</span>
+            </a>
+
+            <a asp-controller="Calendar" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Calendar" ? "active" : "")">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Calendar</span>
+                <span class="badge badge-warning">4</span>
+            </a>
+
+            <a asp-controller="Todo" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Todo" ? "active" : "")">
+                <i class="fas fa-tasks"></i>
+                <span>To-Do List</span>
+                <span class="badge">7</span>
+            </a>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="sidebar-stats">
+            <div class="stat-item">
+                <i class="fas fa-procedures"></i>
+                <div>
+                    <span class="stat-value">245</span>
+                    <span class="stat-label">Beds Occupied</span>
+                </div>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-user-clock"></i>
+                <div>
+                    <span class="stat-value">89</span>
+                    <span class="stat-label">Waiting</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Section -->
+        <div class="sidebar-footer">
+            <a asp-controller="Settings" asp-action="Index" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+
+            <a asp-controller="Help" asp-action="Index" class="nav-item">
+                <i class="fas fa-question-circle"></i>
+                <span>Help & Support</span>
+            </a>
+
+            @if (isAuthenticated)
+            {
+                <form asp-controller="Account" asp-action="Logout" method="post" class="logout-form">
+                    <button type="submit" class="nav-item logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </button>
+                </form>
+            }
+            else
+            {
+                <a asp-controller="Account" asp-action="Login" class="nav-item">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>Login</span>
+                </a>
+            }
+        </div>
+    </nav>
+
+    <!-- Collapsed Sidebar (Mini Version) -->
+    <div class="sidebar-collapsed">
+        <a asp-controller="Dashboard" asp-action="Index" class="nav-icon" title="Dashboard">
+            <i class="fas fa-tachometer-alt"></i>
+        </a>
+        <a asp-controller="Patient" asp-action="Index" class="nav-icon" title="Patients">
+            <i class="fas fa-user-injured"></i>
+        </a>
+        <a asp-controller="Appointment" asp-action="Index" class="nav-icon" title="Appointments">
+            <i class="fas fa-calendar-check"></i>
+            <span class="icon-badge">8</span>
+        </a>
+        <a asp-controller="Inbox" asp-action="Index" class="nav-icon" title="Inbox">
+            <i class="fas fa-inbox"></i>
+            <span class="icon-badge">1253</span>
+        </a>
+        <a asp-controller="Emergency" asp-action="Index" class="nav-icon" title="Emergency">
+            <i class="fas fa-ambulance"></i>
+        </a>
+    </div>
+</aside>
+
+<!-- Backdrop for mobile -->
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+<style>
+    /* Sidebar Styles */
+    :root {
+        --sidebar-width: 260px;
+        --sidebar-collapsed-width: 70px;
+        --sidebar-bg: #ffffff;
+        --sidebar-border: #eef2f7;
+        --primary-color: #4361ee;
+        --primary-light: rgba(67, 97, 238, 0.1);
+        --text-primary: #2c3e50;
+        --text-secondary: #64748b;
+        --hover-bg: #f8fafc;
+        --transition-speed: 0.3s;
+        --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.03);
+        --shadow-medium: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .sidebar {
+        width: var(--sidebar-width);
+        background: var(--sidebar-bg);
+        border-right: 1px solid var(--sidebar-border);
+        position: fixed;
+        height: 100vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+        transition: all var(--transition-speed) ease;
+        z-index: 1000;
+        box-shadow: var(--shadow-light);
+    }
+
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed-width);
+        }
+
+    .sidebar-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--sidebar-border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: white;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: var(--primary-color);
+        font-weight: 700;
+        font-size: 1.25rem;
+    }
+
+        .logo i {
+            font-size: 1.5rem;
+        }
+
+    .logo-text {
+        transition: opacity var(--transition-speed);
+    }
+
+    .sidebar.collapsed .logo-text {
+        opacity: 0;
+        width: 0;
+        overflow: hidden;
+    }
+
+    .sidebar-toggle {
+        background: var(--primary-light);
+        border: none;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        color: var(--primary-color);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+
+        .sidebar-toggle:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: rotate(90deg);
+        }
+
+    /* User Profile */
+    .user-profile {
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--sidebar-border);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    }
+
+    .profile-image {
+        position: relative;
+        width: 45px;
+        height: 45px;
+    }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+    .status-indicator {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        border: 2px solid white;
+    }
+
+        .status-indicator.online {
+            background: #10b981;
+        }
+
+        .status-indicator.away {
+            background: #f59e0b;
+        }
+
+    .profile-info h4 {
+        margin: 0;
+        font-size: 0.95rem;
+        color: var(--text-primary);
+        font-weight: 600;
+    }
+
+    .profile-info p {
+        margin: 0.25rem 0 0 0;
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+    }
+
+    .sidebar.collapsed .profile-info {
+        display: none;
+    }
+
+    /* Navigation Menu */
+    .nav-menu {
+        padding: 1rem 0;
+        height: calc(100vh - 200px);
+        overflow-y: auto;
+    }
+
+    .menu-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .menu-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--text-secondary);
+        padding: 0 1.5rem 0.5rem 1.5rem;
+        font-weight: 600;
+    }
+
+    .sidebar.collapsed .menu-label {
+        display: none;
+    }
+
+    .nav-item {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1.5rem;
+        color: var(--text-primary);
+        text-decoration: none;
+        transition: all 0.2s;
+        position: relative;
+        margin: 0.25rem 0;
+        border-left: 3px solid transparent;
+    }
+
+        .nav-item:hover {
+            background: var(--hover-bg);
+            color: var(--primary-color);
+            border-left-color: var(--primary-color);
+        }
+
+        .nav-item.active {
+            background: var(--primary-light);
+            color: var(--primary-color);
+            font-weight: 600;
+            border-left-color: var(--primary-color);
+        }
+
+        .nav-item i:first-child {
+            width: 20px;
+            text-align: center;
+            margin-right: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .nav-item span:not(.badge) {
+            flex: 1;
+            font-size: 0.9rem;
+            transition: opacity var(--transition-speed);
+        }
+
+    .sidebar.collapsed .nav-item span:not(.badge) {
+        opacity: 0;
+        width: 0;
+        overflow: hidden;
+    }
+
+    /* Badges */
+    .badge {
+        background: #e2e8f0;
+        color: var(--text-secondary);
+        font-size: 0.7rem;
+        padding: 0.15rem 0.5rem;
+        border-radius: 10px;
+        font-weight: 600;
+        min-width: 20px;
+        text-align: center;
+    }
+
+    .badge-primary {
+        background: var(--primary-light);
+        color: var(--primary-color);
+    }
+
+    .badge-success {
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+    }
+
+    .badge-warning {
+        background: rgba(245, 158, 11, 0.1);
+        color: #f59e0b;
+    }
+
+    .badge-danger {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+    }
+
+    /* Submenu */
+    .has-submenu {
+        flex-direction: column;
+        padding: 0;
+    }
+
+    .nav-link {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1.5rem;
+        width: 100%;
+        color: var(--text-primary);
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .arrow {
+        margin-left: auto;
+        transition: transform 0.2s;
+        font-size: 0.8rem;
+    }
+
+    .has-submenu.expanded .arrow {
+        transform: rotate(90deg);
+    }
+
+    .submenu {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        background: #f8fafc;
+    }
+
+    .has-submenu.expanded .submenu {
+        max-height: 300px;
+    }
+
+    .submenu-item {
+        display: block;
+        padding: 0.6rem 1.5rem 0.6rem 3.5rem;
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: all 0.2s;
+        border-left: 3px solid transparent;
+    }
+
+        .submenu-item:hover {
+            background: white;
+            color: var(--primary-color);
+            border-left-color: var(--primary-color);
+        }
+
+    .sidebar.collapsed .submenu {
+        display: none;
+    }
+
+    /* Sidebar Stats */
+    .sidebar-stats {
+        padding: 1rem 1.5rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 10px;
+        margin: 1rem 1.5rem;
+        color: white;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+        .stat-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .stat-item i {
+            font-size: 1.25rem;
+            opacity: 0.9;
+        }
+
+    .stat-value {
+        font-size: 1.25rem;
+        font-weight: 700;
+        display: block;
+        line-height: 1;
+    }
+
+    .stat-label {
+        font-size: 0.75rem;
+        opacity: 0.8;
+        display: block;
+    }
+
+    .sidebar.collapsed .sidebar-stats {
+        display: none;
+    }
+
+    /* Sidebar Footer */
+    .sidebar-footer {
+        border-top: 1px solid var(--sidebar-border);
+        padding-top: 1rem;
+        margin-top: 1rem;
+    }
+
+    .logout-form {
+        margin: 0;
+    }
+
+    .logout-btn {
+        background: none;
+        border: none;
+        width: 100%;
+        text-align: left;
+        font-family: inherit;
+        cursor: pointer;
+    }
+
+    /* Collapsed Sidebar (Mini Version) */
+    .sidebar-collapsed {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem 0;
+    }
+
+    .sidebar.collapsed .sidebar-collapsed {
+        display: flex;
+    }
+
+    .sidebar.collapsed .nav-menu {
+        display: none;
+    }
+
+    .nav-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        color: var(--text-secondary);
+        margin-bottom: 0.75rem;
+        position: relative;
+        transition: all 0.2s;
+    }
+
+        .nav-icon:hover {
+            background: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+    .icon-badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #ef4444;
+        color: white;
+        font-size: 0.6rem;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+    }
+
+    /* Mobile Backdrop */
+    .sidebar-backdrop {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
+
+    /* Scrollbar Styling */
+    .nav-menu::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .nav-menu::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    .nav-menu::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 10px;
+    }
+
+        .nav-menu::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .sidebar {
+            transform: translateX(-100%);
+            width: var(--sidebar-width);
+            box-shadow: var(--shadow-medium);
+        }
+
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+        .sidebar-backdrop.mobile-open {
+            display: block;
+        }
+
+        .sidebar-toggle {
+            display: none;
+        }
+    }
+
+    @@media (min-width: 769px) {
+        .sidebar-backdrop {
+            display: none !important;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebar = document.querySelector('.sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+        const hasSubmenuItems = document.querySelectorAll('.has-submenu .nav-link');
+
+        // Toggle sidebar collapse
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('collapsed');
+
+                // Save state to localStorage
+                localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+            });
+        }
+
+        // Toggle submenus
+        hasSubmenuItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const parent = this.closest('.has-submenu');
+                const isExpanded = parent.classList.contains('expanded');
+
+                // Close all other submenus
+                document.querySelectorAll('.has-submenu.expanded').forEach(el => {
+                    if (el !== parent) {
+                        el.classList.remove('expanded');
+                    }
+                });
+
+                // Toggle current
+                parent.classList.toggle('expanded', !isExpanded);
+
+                // Save expanded state
+                const menuId = parent.querySelector('span').textContent.trim();
+                if (!isExpanded) {
+                    localStorage.setItem(`menu_${menuId}`, 'expanded');
+                } else {
+                    localStorage.removeItem(`menu_${menuId}`);
+                }
+            });
+        });
+
+        // Mobile backdrop click
+        if (sidebarBackdrop) {
+            sidebarBackdrop.addEventListener('click', function() {
+                sidebar.classList.remove('mobile-open');
+                this.classList.remove('mobile-open');
+            });
+        }
+
+        // Restore sidebar state
+        const sidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+        if (sidebarCollapsed && window.innerWidth >= 769) {
+            sidebar.classList.add('collapsed');
+        }
+
+        // Restore expanded submenus
+        hasSubmenuItems.forEach(item => {
+            const parent = item.closest('.has-submenu');
+            const menuId = parent.querySelector('span').textContent.trim();
+            if (localStorage.getItem(`menu_${menuId}`)) {
+                parent.classList.add('expanded');
+            }
+        });
+
+        // Add active class based on current page
+        function setActiveMenu() {
+            const currentPath = window.location.pathname;
+            const navItems = document.querySelectorAll('.nav-item:not(.has-submenu)');
+
+            navItems.forEach(item => {
+                const href = item.getAttribute('href');
+                if (href && currentPath.startsWith(href.split('?')[0])) {
+                    item.classList.add('active');
+
+                    // Expand parent submenu if exists
+                    const parentSubmenu = item.closest('.submenu');
+                    if (parentSubmenu) {
+                        const parent = parentSubmenu.closest('.has-submenu');
+                        parent?.classList.add('expanded');
+                    }
+                }
+            });
+        }
+
+        setActiveMenu();
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'b') {
+                e.preventDefault();
+                sidebar.classList.toggle('collapsed');
+                localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+            }
+        });
+
+        // Responsive handling
+        function handleResponsive() {
+            if (window.innerWidth < 769) {
+                sidebar.classList.remove('collapsed');
+                sidebarToggle.style.display = 'none';
+            } else {
+                sidebarToggle.style.display = 'flex';
+            }
+        }
+
+        handleResponsive();
+        window.addEventListener('resize', handleResponsive);
+
+        // Auto-collapse sidebar when clicking outside on mobile
+        document.addEventListener('click', function(e) {
+            if (window.innerWidth < 769 &&
+                !sidebar.contains(e.target) &&
+                !e.target.closest('.sidebar-toggle') &&
+                sidebar.classList.contains('mobile-open')) {
+                sidebar.classList.remove('mobile-open');
+                sidebarBackdrop?.classList.remove('mobile-open');
+            }
+        });
+    });
+</script>

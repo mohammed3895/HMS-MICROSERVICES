@@ -4,9 +4,9 @@
     {
         public Guid Id { get; set; }
         public Guid RoleId { get; set; }
-        public string Permission { get; set; } // e.g., "Patient.Read", "Patient.Write"
-        public DateTime GrantedAt { get; set; }
+        public string Permission { get; set; } = string.Empty;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public ApplicationRole Role { get; set; }
+        public virtual ApplicationRole Role { get; set; } = null!;
     }
 }

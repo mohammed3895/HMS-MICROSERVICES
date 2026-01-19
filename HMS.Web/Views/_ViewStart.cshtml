@@ -1,0 +1,15 @@
+﻿@{
+    // Determine layout based on controller/action
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+    var action = ViewContext.RouteData.Values["action"]?.ToString();
+
+    // Use auth layout for login/register pages
+    if (controller == "Auth" && (action == "Login" || action == "Register"))
+    {
+        Layout = "_AuthLayout";
+    }
+    else
+    {
+        Layout = "_Layout";
+    }
+}

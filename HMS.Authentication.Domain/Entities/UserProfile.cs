@@ -14,8 +14,10 @@
         public string? BloodGroup { get; set; }
         public string? Allergies { get; set; }
         public string? Notes { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; }
 
-        public ApplicationUser User { get; set; }
+        public virtual ApplicationUser User { get; set; } = null!;
     }
 
 }

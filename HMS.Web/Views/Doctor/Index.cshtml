@@ -1,0 +1,230 @@
+﻿@using HMS.Web.Models
+@using HMS.Web.Models.DTOs.Doctor
+@model List<DoctorDto>
+@{
+    ViewData["Title"] = "Find a Doctor";
+}
+
+<div class="page-header">
+    <h1><i class="fas fa-stethoscope"></i> Our Doctors</h1>
+    <p>Find and connect with our qualified healthcare professionals</p>
+</div>
+
+<div class="doctors-filters">
+    <form method="get" class="filter-form">
+        <div class="filter-group">
+            <input type="text" name="search" placeholder="Search by name..." class="form-control" />
+        </div>
+        <div class="filter-group">
+            <select name="specialization" class="form-control">
+                <option value="">All Specializations</option>
+                <option value="Cardiology">Cardiology</option>
+                <option value="Neurology">Neurology</option>
+                <option value="Pediatrics">Pediatrics</option>
+                <option value="Orthopedics">Orthopedics</option>
+                <option value="Dentistry">Dentistry</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-search"></i> Filter
+        </button>
+    </form>
+</div>
+
+<div class="doctors-grid">
+    @if (Model?.Any() == true)
+    {
+        @foreach (var doctor in Model)
+        {
+            <div class="doctor-card-large">
+                <div class="card-image">
+                    <div class="avatar-lg">@doctor.FullName.Substring(0, 1).ToUpper()</div>
+                    <span class="specialization-badge">@doctor.Specialization</span>
+                </div>
+                <div class="card-content">
+                    <h3>@doctor.FullName</h3>
+                    <p class="license">License #@doctor.LicenseNumber</p>
+                    <div class="doctor-meta">
+                        <a href="mailto:@doctor.Email" class="meta-item">
+                            <i class="fas fa-envelope"></i> @doctor.Email
+                        </a>
+                        <a href="tel:@doctor.Phone" class="meta-item">
+                            <i class="fas fa-phone"></i> @doctor.Phone
+                        </a>
+                    </div>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                        <span>(4.5)</span>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <a asp-controller="Doctor" asp-action="Details" asp-route-id="@doctor.DoctorId" class="btn btn-secondary btn-sm btn-block">
+                        <i class="fas fa-user"></i> View Profile
+                    </a>
+                    <a asp-controller="Appointment" asp-action="Create" asp-route-doctorId="@doctor.DoctorId" class="btn btn-primary btn-sm btn-block">
+                        <i class="fas fa-calendar-plus"></i> Book Appointment
+                    </a>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="empty-state" style="grid-column: 1 / -1;">
+            <i class="fas fa-search"></i>
+            <h3>No doctors found</h3>
+            <p>Try adjusting your search filters</p>
+        </div>
+    }
+</div>
+
+<style>
+    .page-header {
+        margin-bottom: 2rem;
+    }
+
+        .page-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+        }
+
+    .doctors-filters {
+        margin-bottom: 2rem;
+    }
+
+    .filter-form {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .filter-group {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .doctors-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 2rem;
+    }
+
+    .doctor-card-large {
+        background: var(--bg-primary);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .doctor-card-large:hover {
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+    .card-image {
+        position: relative;
+        padding: 2rem 1rem;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        text-align: center;
+    }
+
+    .avatar-lg {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0 auto;
+    }
+
+    .specialization-badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .card-content {
+        padding: 1.5rem;
+        flex: 1;
+    }
+
+        .card-content h3 {
+            margin-bottom: 0.25rem;
+        }
+
+    .license {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+    }
+
+    .doctor-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .meta-item {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+        .meta-item:hover {
+            color: var(--primary);
+        }
+
+    .rating {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+        .rating i {
+            color: var(--warning);
+        }
+
+    .card-actions {
+        padding: 1rem;
+        border-top: 1px solid var(--border);
+        background: var(--bg-secondary);
+        display: flex;
+        gap: 0.5rem;
+        flex-direction: column;
+    }
+
+    @@media (max-width: 768px) {
+        .doctors-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .filter-form {
+            flex-direction: column;
+        }
+    }
+</style>

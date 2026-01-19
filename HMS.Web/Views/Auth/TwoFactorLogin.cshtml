@@ -1,0 +1,232 @@
+﻿@{
+    ViewData["Title"] = "Two-Factor Authentication - Medixus Healthcare";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="~/css/auth.css">
+    <style>
+        .twofa-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .twofa-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--info) 0%, var(--primary) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: white;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @@keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+            }
+
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+            }
+        }
+
+        .auth-content-centered {
+            max-width: 450px;
+            margin: 0 auto;
+        }
+
+        .recovery-toggle {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+        }
+
+            .recovery-toggle summary {
+                cursor: pointer;
+                color: var(--text-secondary);
+                font-size: 0.95rem;
+                font-weight: 600;
+                list-style: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+
+                .recovery-toggle summary::-webkit-details-marker {
+                    display: none;
+                }
+
+            .recovery-toggle[open] summary {
+                margin-bottom: 1rem;
+            }
+
+        .recovery-content {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-wrapper">
+        <div class="auth-container" style="max-width: 500px;">
+            <div class="auth-content auth-content-centered">
+                <div class="twofa-header">
+                    <div class="twofa-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h1>Two-Factor Authentication</h1>
+                    <p class="auth-subtitle">Enter the code from your authenticator app to continue</p>
+                </div>
+
+                <form method="post" asp-action="Verify2FALogin">
+                    @Html.AntiForgeryToken()
+
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <div>
+                                @foreach (var modelState in ViewData.ModelState.Values)
+                                {
+                                    foreach (var error in modelState.Errors)
+                                    {
+                                        <p>@error.ErrorMessage</p>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    <div class="form-group">
+                        <label class="form-label" style="justify-content: center;">
+                            <i class="fas fa-key"></i>
+                            <span>Authentication Code</span>
+                        </label>
+                        <div class="otp-inputs" id="otpInputs">
+                            <input type="text" class="otp-input" maxlength="1" inputmode="numeric" autocomplete="off" />
+                            <input type="text" class="otp-input" maxlength="1" inputmode="numeric" autocomplete="off" />
+                            <input type="text" class="otp-input" maxlength="1" inputmode="numeric" autocomplete="off" />
+                            <input type="text" class="otp-input" maxlength="1" inputmode="numeric" autocomplete="off" />
+                            <input type="text" class="otp-input" maxlength="1" inputmode="numeric" autocomplete="off" />
+                            <input type="text" class="otp-input" maxlength="1" inputmode="numeric" autocomplete="off" />
+                        </div>
+                        <input type="hidden" id="codeInput" name="Code" />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block" id="verifyBtn" disabled>
+                        <i class="fas fa-check-circle"></i>
+                        <span>Verify & Continue</span>
+                    </button>
+
+                    <details class="recovery-toggle">
+                        <summary>
+                            <i class="fas fa-key"></i>
+                            <span>Use recovery code instead</span>
+                        </summary>
+                        <div class="recovery-content">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label" for="recoveryCode">
+                                    <i class="fas fa-unlock-alt"></i>
+                                    <span>Recovery Code</span>
+                                </label>
+                                <div class="input-wrapper">
+                                    <input type="text" class="form-control" id="recoveryCode" name="RecoveryCode"
+                                           placeholder="XXXX-XXXX-XXXX" style="text-transform: uppercase;">
+                                    <i class="fas fa-unlock-alt input-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+
+                    <div class="auth-divider">
+                        <span>Need help?</span>
+                    </div>
+
+                    <a href="/auth/login" class="btn btn-secondary btn-block">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back to Sign In</span>
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const otpInputs = document.querySelectorAll('.otp-input');
+            const codeInput = document.getElementById('codeInput');
+            const verifyBtn = document.getElementById('verifyBtn');
+
+            // OTP Input Handler
+            otpInputs.forEach((input, index) => {
+                input.addEventListener('input', (e) => {
+                    e.target.value = e.target.value.replace(/[^0-9]/g, '');
+
+                    if (e.target.value && index < otpInputs.length - 1) {
+                        otpInputs[index + 1].focus();
+                    }
+
+                    updateCode();
+                    e.target.classList.toggle('filled', !!e.target.value);
+                });
+
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                        otpInputs[index - 1].focus();
+                    }
+                });
+
+                input.addEventListener('paste', (e) => {
+                    e.preventDefault();
+                    const pastedData = e.clipboardData.getData('text').replace(/[^0-9]/g, '');
+                    pastedData.split('').forEach((char, i) => {
+                        if (index + i < otpInputs.length) {
+                            otpInputs[index + i].value = char;
+                            otpInputs[index + i].classList.add('filled');
+                        }
+                    });
+                    updateCode();
+                });
+            });
+
+            function updateCode() {
+                const code = Array.from(otpInputs).map(input => input.value).join('');
+                codeInput.value = code;
+                verifyBtn.disabled = code.length !== 6;
+            }
+
+            otpInputs[0].focus();
+
+            // Auto-format recovery code
+            const recoveryCodeInput = document.getElementById('recoveryCode');
+            recoveryCodeInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+                let formatted = '';
+
+                for (let i = 0; i < value.length && i < 12; i++) {
+                    if (i > 0 && i % 4 === 0) {
+                        formatted += '-';
+                    }
+                    formatted += value[i];
+                }
+
+                e.target.value = formatted;
+            });
+        });
+    </script>
+</body>
+</html>

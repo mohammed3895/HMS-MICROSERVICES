@@ -1,5 +1,8 @@
 <Solution>
   <Folder Name="/src/" />
+  <Folder Name="/src/Gateway/">
+    <Project Path="APIGateway/APIGateway.csproj" Id="8122ac6f-755e-4bb5-9a85-ece0e5a9c16d" />
+  </Folder>
   <Folder Name="/src/Services/" />
   <Folder Name="/src/Services/Appointment/">
     <Project Path="HMS.Appointment.API/HMS.Appointment.API.csproj" />
@@ -32,6 +35,7 @@
     <Project Path="HMS.Laboratory.Infrastructure/HMS.Laboratory.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/src/Services/MedicalRecords/">
+    <Project Path="HMS.MedicalRecords.API/HMS.MedicalRecords.API.csproj" Id="163fa6b2-5b71-475b-8947-458d5b3f9fd0" />
     <Project Path="HMS.MedicalRecords.Application/HMS.MedicalRecords.Application.csproj" Id="1ee3183c-9a4a-4d79-9339-8bf3ed119e02" />
     <Project Path="HMS.MedicalRecords.Domain/HMS.MedicalRecords.Domain.csproj" Id="0b1ebea3-1fc8-4fd9-b0e8-d1a98134aa37" />
     <Project Path="HMS.MedicalRecords.Infrastructure/HMS.MedicalRecords.Infrastructure.csproj" Id="5adc9076-5e26-471b-9757-0b025abddc6b" />
@@ -63,5 +67,8 @@
   <Folder Name="/src/Shared/">
     <Project Path="HMS.Common/HMS.Common.csproj" Id="0d94df32-f425-4250-9aca-1f8466193b9e" />
     <Project Path="HMS.SharedKernel/HMS.SharedKernel.csproj" Id="1ac0bcd8-8e71-4044-80bb-c39e984df36c" />
+  </Folder>
+  <Folder Name="/src/Web/">
+    <Project Path="HMS.Web/HMS.Web.csproj" Id="7f4a8221-2623-4d68-8639-a248656fa562" />
   </Folder>
 </Solution>

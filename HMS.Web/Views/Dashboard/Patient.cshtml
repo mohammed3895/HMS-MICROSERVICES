@@ -1,0 +1,187 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "_Layout";
+}
+
+<div class="dashboard-container">
+    <!-- Header -->
+    <div class="dashboard-header">
+        <h1 class="page-title">Dashboard</h1>
+        <div class="date-filter">
+            <span>October 2019</span>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-content">
+                <h3>40,689</h3>
+                <p>Total Patients</p>
+                <span class="stat-trend positive">
+                    <i class="fas fa-arrow-up"></i> 8.5% from yesterday
+                </span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+            <div class="stat-content">
+                <h3>10,293</h3>
+                <p>Total Appointments</p>
+                <span class="stat-trend positive">
+                    <i class="fas fa-arrow-up"></i> 1.3% from past week
+                </span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-money-bill-wave"></i>
+            </div>
+            <div class="stat-content">
+                <h3>$89,000</h3>
+                <p>Total Revenue</p>
+                <span class="stat-trend negative">
+                    <i class="fas fa-arrow-down"></i> 4.3% from yesterday
+                </span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-content">
+                <h3>2,040</h3>
+                <p>Pending Tasks</p>
+                <span class="stat-trend positive">
+                    <i class="fas fa-arrow-up"></i> 1.8% from yesterday
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="charts-grid">
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3>Patient Statistics</h3>
+                <div class="chart-legend">
+                    <span class="legend-item"><i class="fas fa-circle new-patients"></i> New Patients</span>
+                    <span class="legend-item"><i class="fas fa-circle returning-patients"></i> Returning</span>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="patientsChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3>Revenue Analytics</h3>
+                <div class="chart-legend">
+                    <span class="legend-item"><i class="fas fa-circle revenue"></i> Revenue</span>
+                    <span class="legend-item"><i class="fas fa-circle profit"></i> Profit</span>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Appointments -->
+    <div class="table-card">
+        <div class="table-header">
+            <h3>Recent Appointments</h3>
+            <a href="/Appointment" class="view-all">View All</a>
+        </div>
+        <div class="table-responsive">
+            <table class="appointments-table">
+                <thead>
+                    <tr>
+                        <th>Patient Name</th>
+                        <th>Doctor</th>
+                        <th>Department</th>
+                        <th>Date & Time</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="patient-info">
+                                <img src="~/images/avatars/avatar1.jpg" alt="Avatar">
+                                <span>John Smith</span>
+                            </div>
+                        </td>
+                        <td>Dr. Sarah Johnson</td>
+                        <td>Cardiology</td>
+                        <td>12.09.2019 - 12:53 PM</td>
+                        <td><span class="status-badge completed">Completed</span></td>
+                        <td>
+                            <button class="btn-action"><i class="fas fa-eye"></i></button>
+                            <button class="btn-action"><i class="fas fa-edit"></i></button>
+                        </td>
+                    </tr>
+                    <!-- More rows... -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Initialize charts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Patients Chart
+            const patientsCtx = document.getElementById('patientsChart').getContext('2d');
+            new Chart(patientsCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'New Patients',
+                        data: [65, 59, 80, 81, 56, 55],
+                        borderColor: '#3B82F6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Returning Patients',
+                        data: [28, 48, 40, 19, 86, 27],
+                        borderColor: '#10B981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        tension: 0.4
+                    }]
+                }
+            });
+
+            // Revenue Chart
+            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+            new Chart(revenueCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Revenue',
+                        data: [65000, 59000, 80000, 81000, 56000, 55000],
+                        backgroundColor: '#3B82F6'
+                    }, {
+                        label: 'Profit',
+                        data: [28000, 48000, 40000, 19000, 86000, 27000],
+                        backgroundColor: '#10B981'
+                    }]
+                }
+            });
+        });
+    </script>
+}

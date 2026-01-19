@@ -1,0 +1,98 @@
+﻿@using HMS.Web.Models.DTOs.Doctor
+@model DoctorDto
+
+<div class="doctor-card">
+    <div class="doctor-avatar">
+        @Html.DisplayName(Model.FullName.Substring(0, 1).ToUpper())
+    </div>
+    <div class="doctor-info">
+        <h3>@Model.FullName</h3>
+        <p class="specialization">@Model.Specialization</p>
+        <div class="doctor-contact">
+            <a href="mailto:@Model.Email" title="Email">
+                <i class="fas fa-envelope"></i>
+            </a>
+            <a href="tel:@Model.Phone" title="Call">
+                <i class="fas fa-phone"></i>
+            </a>
+        </div>
+    </div>
+    <div class="doctor-actions">
+        <a href="@Url.Action("Details", "Doctor", new { id = Model.DoctorId })" class="btn btn-sm btn-primary">
+            View Profile
+        </a>
+        <a href="@Url.Action("Create", "Appointment", new { doctorId = Model.DoctorId })" class="btn btn-sm btn-secondary">
+            Book Appointment
+        </a>
+    </div>
+</div>
+
+<style>
+    .doctor-card {
+        background: var(--bg-primary);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        transition: all 0.3s;
+    }
+
+        .doctor-card:hover {
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+    .doctor-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0 auto 1rem;
+    }
+
+    .doctor-info h3 {
+        margin-bottom: 0.5rem;
+    }
+
+    .specialization {
+        color: var(--primary);
+        font-weight: 600;
+        margin-bottom: 1rem !important;
+    }
+
+    .doctor-contact {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+        .doctor-contact a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+            .doctor-contact a:hover {
+                background: var(--primary);
+                color: white;
+            }
+
+    .doctor-actions {
+        display: flex;
+        gap: 0.5rem;
+        flex-direction: column;
+    }
+</style>

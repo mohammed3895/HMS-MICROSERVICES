@@ -1,0 +1,1422 @@
+﻿@{
+    var userName = User.Identity?.Name ?? "Guest";
+    var userRole = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value ?? "Guest";
+}
+
+<nav class="top-nav">
+    <!-- Left Section: Menu Toggle and Search -->
+    <div class="nav-left">
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a asp-controller="Dashboard" asp-action="Index" class="breadcrumb-item">
+                <i class="fas fa-home"></i>
+            </a>
+            @{
+                var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+                var action = ViewContext.RouteData.Values["action"]?.ToString();
+
+                if (!string.IsNullOrEmpty(controller) && controller != "Dashboard")
+                {
+                    <span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>
+                    <span class="breadcrumb-item">@controller</span>
+                }
+
+                if (!string.IsNullOrEmpty(action) && action != "Index")
+                {
+                    <span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>
+                    <span class="breadcrumb-item">@action</span>
+                }
+            }
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="Search patients, doctors, appointments...">
+            <button class="search-clear" style="display: none;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Right Section: User Actions & Notifications -->
+    <div class="nav-right">
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <button class="nav-action-btn" title="Create Appointment">
+                <i class="fas fa-plus-circle"></i>
+                <span class="action-label">New Appointment</span>
+            </button>
+
+            <button class="nav-action-btn" title="Emergency Alert">
+                <i class="fas fa-ambulance"></i>
+                <span class="action-label">Emergency</span>
+            </button>
+        </div>
+
+        <!-- Notifications -->
+        <div class="notification-dropdown dropdown">
+            <button class="notification-btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-bell"></i>
+                <span class="notification-count">8</span>
+            </button>
+            <div class="dropdown-menu notification-menu">
+                <div class="notification-header">
+                    <h6>Notifications</h6>
+                    <a href="#" class="mark-all-read">Mark all as read</a>
+                </div>
+                <div class="notification-list">
+                    <a href="#" class="notification-item unread">
+                        <div class="notification-icon">
+                            <i class="fas fa-user-md text-primary"></i>
+                        </div>
+                        <div class="notification-content">
+                            <p><strong>Dr. Johnson</strong> has requested lab results</p>
+                            <span class="notification-time">2 mins ago</span>
+                        </div>
+                    </a>
+                    <a href="#" class="notification-item unread">
+                        <div class="notification-icon">
+                            <i class="fas fa-prescription-bottle text-success"></i>
+                        </div>
+                        <div class="notification-content">
+                            <p>Pharmacy order #PH123 is ready for pickup</p>
+                            <span class="notification-time">15 mins ago</span>
+                        </div>
+                    </a>
+                    <a href="#" class="notification-item">
+                        <div class="notification-icon">
+                            <i class="fas fa-calendar-check text-warning"></i>
+                        </div>
+                        <div class="notification-content">
+                            <p>Appointment with <strong>John Smith</strong> in 30 minutes</p>
+                            <span class="notification-time">1 hour ago</span>
+                        </div>
+                    </a>
+                    <a href="#" class="notification-item">
+                        <div class="notification-icon">
+                            <i class="fas fa-exclamation-triangle text-danger"></i>
+                        </div>
+                        <div class="notification-content">
+                            <p>Critical lab results for Patient #PT045</p>
+                            <span class="notification-time">2 hours ago</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="notification-footer">
+                    <a href="/Notification">View All Notifications</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Messages -->
+        <div class="message-dropdown dropdown">
+            <button class="message-btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-envelope"></i>
+                <span class="message-count">5</span>
+            </button>
+            <div class="dropdown-menu message-menu">
+                <div class="message-header">
+                    <h6>Messages</h6>
+                    <span class="badge bg-primary">1253</span>
+                </div>
+                <div class="message-list">
+                    <a href="#" class="message-item unread">
+                        <div class="message-avatar">
+                            <img src="~/images/avatars/doctor1.jpg" alt="Dr. Smith">
+                        </div>
+                        <div class="message-content">
+                            <h6>Dr. Michael Smith</h6>
+                            <p>Can you review the patient case #234?</p>
+                            <span class="message-time">10:30 AM</span>
+                        </div>
+                    </a>
+                    <a href="#" class="message-item unread">
+                        <div class="message-avatar">
+                            <img src="~/images/avatars/nurse1.jpg" alt="Nurse">
+                        </div>
+                        <div class="message-content">
+                            <h6>Sarah Johnson</h6>
+                            <p>Patient in room 302 needs attention</p>
+                            <span class="message-time">9:15 AM</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="message-footer">
+                    <a href="/Inbox">Go to Inbox</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Profile -->
+        <div class="user-dropdown dropdown">
+            <button class="user-profile-btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="user-avatar">
+                    <img src="~/images/avatars/doctor-avatar.jpg" alt="@userName">
+                    <span class="user-status online"></span>
+                </div>
+                <div class="user-info">
+                    <span class="user-name">@userName</span>
+                    <span class="user-role">@userRole</span>
+                </div>
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="dropdown-menu user-menu">
+                <div class="user-menu-header">
+                    <div class="user-avatar-lg">
+                        <img src="~/images/avatars/doctor-avatar.jpg" alt="@userName">
+                    </div>
+                    <div class="user-details">
+                        <h5>@userName</h5>
+                        <p>@userRole</p>
+                        <span class="user-email">sarah.johnson@hospital.com</span>
+                    </div>
+                </div>
+                <div class="user-menu-body">
+                    <a href="/Profile" class="dropdown-item">
+                        <i class="fas fa-user"></i>
+                        <span>My Profile</span>
+                    </a>
+                    <a href="/Settings" class="dropdown-item">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                    <a href="/Calendar" class="dropdown-item">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>My Schedule</span>
+                    </a>
+                    <a href="/Todo" class="dropdown-item">
+                        <i class="fas fa-tasks"></i>
+                        <span>To-Do List</span>
+                        <span class="badge bg-warning float-end">7</span>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="/Help" class="dropdown-item">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Help & Support</span>
+                    </a>
+                    <a href="#" class="dropdown-item theme-toggle">
+                        <i class="fas fa-moon"></i>
+                        <span>Dark Mode</span>
+                        <div class="theme-switch">
+                            <input type="checkbox" id="themeSwitch">
+                            <label for="themeSwitch"></label>
+                        </div>
+                    </a>
+                </div>
+                <div class="user-menu-footer">
+                    <form asp-controller="Account" asp-action="Logout" method="post">
+                        <button type="submit" class="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Sign Out</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hospital Status -->
+        <div class="hospital-status">
+            <div class="status-indicator">
+                <i class="fas fa-heartbeat"></i>
+                <div class="status-info">
+                    <span class="status-value">89%</span>
+                    <span class="status-label">ICU Occupancy</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Search Toggle -->
+    <button class="mobile-search-toggle" id="mobileSearchToggle">
+        <i class="fas fa-search"></i>
+    </button>
+</nav>
+
+<!-- Mobile Search Overlay -->
+<div class="mobile-search-overlay" id="mobileSearchOverlay">
+    <div class="mobile-search-container">
+        <div class="mobile-search-header">
+            <button class="mobile-search-close" id="mobileSearchClose">
+                <i class="fas fa-times"></i>
+            </button>
+            <h5>Search</h5>
+        </div>
+        <div class="mobile-search-body">
+            <div class="search-input-group">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search everything..." class="mobile-search-input">
+                <button class="search-mobile-clear">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="search-suggestions">
+                <h6>Quick Links</h6>
+                <a href="/Patient" class="suggestion-item">
+                    <i class="fas fa-user-injured"></i>
+                    <span>Patient Records</span>
+                </a>
+                <a href="/Appointment" class="suggestion-item">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Appointments</span>
+                </a>
+                <a href="/Pharmacy" class="suggestion-item">
+                    <i class="fas fa-prescription-bottle-alt"></i>
+                    <span>Pharmacy</span>
+                </a>
+                <a href="/Reports" class="suggestion-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reports</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Navigation Styles */
+    .top-nav {
+        background: #ffffff;
+        padding: 0.75rem 1.5rem;
+        border-bottom: 1px solid #eef2f7;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        transition: all 0.3s ease;
+    }
+
+        .top-nav.scrolled {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+    .nav-left {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        flex: 1;
+    }
+
+    .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    /* Mobile Menu Toggle */
+    .mobile-menu-toggle {
+        display: none;
+        background: none;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        color: #64748b;
+        font-size: 1.25rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .mobile-menu-toggle:hover {
+            background: #f1f5f9;
+            color: #4361ee;
+        }
+
+    /* Breadcrumb */
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+    }
+
+    .breadcrumb-item {
+        color: #64748b;
+        text-decoration: none;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        transition: all 0.2s;
+    }
+
+        .breadcrumb-item:hover {
+            color: #4361ee;
+            background: #f1f5f9;
+        }
+
+        .breadcrumb-item i {
+            font-size: 1rem;
+        }
+
+    .breadcrumb-separator {
+        color: #cbd5e1;
+        font-size: 0.75rem;
+    }
+
+    /* Search Container */
+    .search-container {
+        position: relative;
+        flex: 1;
+        max-width: 500px;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        font-size: 1rem;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 0.75rem 1rem 0.75rem 2.75rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        background: #f8fafc;
+        font-size: 0.875rem;
+        transition: all 0.3s;
+    }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #4361ee;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: #94a3b8;
+        }
+
+    .search-clear {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #94a3b8;
+        cursor: pointer;
+        padding: 0.25rem;
+        border-radius: 4px;
+        display: none;
+    }
+
+        .search-clear:hover {
+            color: #64748b;
+            background: #e2e8f0;
+        }
+
+    .search-input:not(:placeholder-shown) ~ .search-clear {
+        display: block;
+    }
+
+    /* Quick Actions */
+    .quick-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-right: 1rem;
+    }
+
+    .nav-action-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        background: #ffffff;
+        color: #64748b;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .nav-action-btn:hover {
+            background: #4361ee;
+            color: #ffffff;
+            border-color: #4361ee;
+            transform: translateY(-1px);
+        }
+
+        .nav-action-btn i {
+            font-size: 1rem;
+        }
+
+    .action-label {
+        font-weight: 500;
+    }
+
+    /* Notification & Message Buttons */
+    .notification-btn,
+    .message-btn {
+        position: relative;
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        border: none;
+        background: #f8fafc;
+        color: #64748b;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+
+        .notification-btn:hover,
+        .message-btn:hover {
+            background: #4361ee;
+            color: #ffffff;
+        }
+
+    .notification-count,
+    .message-count {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #ef4444;
+        color: #ffffff;
+        font-size: 0.7rem;
+        font-weight: 600;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Dropdown Menus */
+    .dropdown {
+        position: relative;
+    }
+
+    .dropdown-menu {
+        position: absolute;
+        right: 0;
+        top: 100%;
+        width: 320px;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        margin-top: 0.5rem;
+        display: none;
+        z-index: 1000;
+        animation: dropdownFade 0.2s ease;
+    }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+    @@keyframes dropdownFade {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Notification Menu */
+    .notification-header {
+        padding: 1rem;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .notification-header h6 {
+            margin: 0;
+            font-size: 1rem;
+            color: #1e293b;
+        }
+
+    .mark-all-read {
+        font-size: 0.875rem;
+        color: #4361ee;
+        text-decoration: none;
+    }
+
+    .notification-list {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .notification-item {
+        display: flex;
+        padding: 1rem;
+        text-decoration: none;
+        color: #334155;
+        border-bottom: 1px solid #f1f5f9;
+        transition: all 0.2s;
+    }
+
+        .notification-item:hover {
+            background: #f8fafc;
+        }
+
+        .notification-item.unread {
+            background: #f0f9ff;
+        }
+
+    .notification-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: #f1f5f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 0.75rem;
+        flex-shrink: 0;
+    }
+
+    .notification-content {
+        flex: 1;
+    }
+
+        .notification-content p {
+            margin: 0 0 0.25rem 0;
+            font-size: 0.875rem;
+            line-height: 1.4;
+        }
+
+    .notification-time {
+        font-size: 0.75rem;
+        color: #94a3b8;
+    }
+
+    .notification-footer {
+        padding: 1rem;
+        text-align: center;
+        border-top: 1px solid #e2e8f0;
+    }
+
+        .notification-footer a {
+            color: #4361ee;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+    /* Message Menu */
+    .message-header {
+        padding: 1rem;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .message-list {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .message-item {
+        display: flex;
+        padding: 1rem;
+        text-decoration: none;
+        color: #334155;
+        border-bottom: 1px solid #f1f5f9;
+        transition: all 0.2s;
+    }
+
+        .message-item:hover {
+            background: #f8fafc;
+        }
+
+    .message-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-right: 0.75rem;
+        flex-shrink: 0;
+    }
+
+        .message-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .message-content {
+        flex: 1;
+    }
+
+        .message-content h6 {
+            margin: 0 0 0.25rem 0;
+            font-size: 0.875rem;
+            color: #1e293b;
+        }
+
+        .message-content p {
+            margin: 0 0 0.25rem 0;
+            font-size: 0.813rem;
+            color: #64748b;
+            line-height: 1.3;
+        }
+
+    .message-time {
+        font-size: 0.75rem;
+        color: #94a3b8;
+    }
+
+    /* User Profile */
+    .user-profile-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.5rem;
+        border: none;
+        background: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        border-radius: 8px;
+    }
+
+        .user-profile-btn:hover {
+            background: #f8fafc;
+        }
+
+    .user-avatar {
+        position: relative;
+        width: 40px;
+        height: 40px;
+    }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+    .user-status {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        border: 2px solid #ffffff;
+    }
+
+        .user-status.online {
+            background: #10b981;
+        }
+
+        .user-status.away {
+            background: #f59e0b;
+        }
+
+        .user-status.offline {
+            background: #94a3b8;
+        }
+
+    .user-info {
+        text-align: left;
+    }
+
+    .user-name {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #1e293b;
+    }
+
+    .user-role {
+        display: block;
+        font-size: 0.75rem;
+        color: #64748b;
+    }
+
+    .user-profile-btn i {
+        color: #94a3b8;
+        font-size: 0.875rem;
+    }
+
+    /* User Menu */
+    .user-menu {
+        width: 280px;
+    }
+
+    .user-menu-header {
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+        color: white;
+        border-radius: 12px 12px 0 0;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .user-avatar-lg {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 3px solid rgba(255, 255, 255, 0.2);
+    }
+
+        .user-avatar-lg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .user-details h5 {
+        margin: 0 0 0.25rem 0;
+        font-size: 1rem;
+    }
+
+    .user-details p {
+        margin: 0 0 0.25rem 0;
+        font-size: 0.875rem;
+        opacity: 0.9;
+    }
+
+    .user-email {
+        font-size: 0.75rem;
+        opacity: 0.7;
+    }
+
+    .user-menu-body {
+        padding: 1rem 0;
+    }
+
+        .user-menu-body .dropdown-item {
+            padding: 0.75rem 1.5rem;
+            color: #64748b;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.2s;
+        }
+
+            .user-menu-body .dropdown-item:hover {
+                background: #f8fafc;
+                color: #4361ee;
+            }
+
+            .user-menu-body .dropdown-item i {
+                width: 20px;
+                text-align: center;
+            }
+
+        .user-menu-body .dropdown-divider {
+            margin: 0.5rem 0;
+            border-color: #e2e8f0;
+        }
+
+    .theme-toggle {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .theme-switch {
+        position: relative;
+        width: 44px;
+        height: 24px;
+    }
+
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .theme-switch label {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cbd5e1;
+            border-radius: 24px;
+            transition: .4s;
+        }
+
+            .theme-switch label:before {
+                position: absolute;
+                content: "";
+                height: 18px;
+                width: 18px;
+                left: 3px;
+                bottom: 3px;
+                background-color: white;
+                border-radius: 50%;
+                transition: .4s;
+            }
+
+        .theme-switch input:checked + label {
+            background-color: #4361ee;
+        }
+
+            .theme-switch input:checked + label:before {
+                transform: translateX(20px);
+            }
+
+    .user-menu-footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid #e2e8f0;
+    }
+
+    .logout-btn {
+        width: 100%;
+        padding: 0.75rem;
+        background: #fef2f2;
+        border: 1px solid #fee2e2;
+        border-radius: 8px;
+        color: #dc2626;
+        font-weight: 500;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        transition: all 0.2s;
+    }
+
+        .logout-btn:hover {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+    /* Hospital Status */
+    .hospital-status {
+        padding-left: 1rem;
+        border-left: 1px solid #e2e8f0;
+    }
+
+    .status-indicator {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+        .status-indicator i {
+            font-size: 1.5rem;
+            color: #ef4444;
+        }
+
+    .status-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .status-value {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #1e293b;
+    }
+
+    .status-label {
+        font-size: 0.75rem;
+        color: #64748b;
+    }
+
+    /* Mobile Search */
+    .mobile-search-toggle {
+        display: none;
+        background: none;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        color: #64748b;
+        font-size: 1.25rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .mobile-search-toggle:hover {
+            background: #f1f5f9;
+            color: #4361ee;
+        }
+
+    /* Mobile Search Overlay */
+    .mobile-search-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 2000;
+        display: none;
+        animation: fadeIn 0.3s ease;
+    }
+
+        .mobile-search-overlay.show {
+            display: block;
+        }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    .mobile-search-container {
+        background: white;
+        width: 100%;
+        max-height: 100vh;
+        overflow-y: auto;
+        animation: slideDown 0.3s ease;
+    }
+
+    @@keyframes slideDown {
+        from {
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .mobile-search-header {
+        padding: 1rem;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .mobile-search-close {
+        background: none;
+        border: none;
+        font-size: 1.25rem;
+        color: #64748b;
+        cursor: pointer;
+        padding: 0.25rem;
+        border-radius: 4px;
+        transition: all 0.2s;
+    }
+
+        .mobile-search-close:hover {
+            background: #f1f5f9;
+            color: #4361ee;
+        }
+
+    .mobile-search-body {
+        padding: 2rem 1rem;
+    }
+
+    .search-input-group {
+        position: relative;
+        margin-bottom: 2rem;
+    }
+
+        .search-input-group i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 1.25rem;
+        }
+
+    .mobile-search-input {
+        width: 100%;
+        padding: 1rem 1rem 1rem 3rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s;
+    }
+
+        .mobile-search-input:focus {
+            outline: none;
+            border-color: #4361ee;
+        }
+
+    .search-mobile-clear {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #94a3b8;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 4px;
+        display: none;
+    }
+
+    .mobile-search-input:not(:placeholder-shown) ~ .search-mobile-clear {
+        display: block;
+    }
+
+    .search-suggestions {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .suggestion-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1.5rem 1rem;
+        background: #f8fafc;
+        border-radius: 12px;
+        text-decoration: none;
+        color: #64748b;
+        transition: all 0.3s;
+    }
+
+        .suggestion-item:hover {
+            background: #4361ee;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .suggestion-item i {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .suggestion-item span {
+            font-size: 0.875rem;
+            text-align: center;
+        }
+
+    /* Responsive Design */
+    @@media (max-width: 1200px) {
+        .quick-actions .action-label {
+            display: none;
+        }
+
+        .quick-actions .nav-action-btn {
+            padding: 0.5rem;
+        }
+    }
+
+    @@media (max-width: 992px) {
+        .quick-actions {
+            display: none;
+        }
+
+        .hospital-status {
+            display: none;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .top-nav {
+            padding: 0.75rem 1rem;
+        }
+
+        .mobile-menu-toggle {
+            display: block;
+        }
+
+        .breadcrumb {
+            display: none;
+        }
+
+        .search-container {
+            display: none;
+        }
+
+        .mobile-search-toggle {
+            display: block;
+        }
+
+        .notification-btn .notification-count,
+        .message-btn .message-count {
+            display: none;
+        }
+
+        .user-info {
+            display: none;
+        }
+
+        .user-profile-btn i {
+            display: none;
+        }
+
+        .dropdown-menu {
+            position: fixed;
+            top: 60px;
+            left: 1rem;
+            right: 1rem;
+            width: auto;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .search-suggestions {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mobile Menu Toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        if (mobileMenuToggle) {
+            mobileMenuToggle.addEventListener('click', function() {
+                const sidebar = document.querySelector('.sidebar');
+                const backdrop = document.querySelector('.sidebar-backdrop');
+                sidebar.classList.add('mobile-open');
+                backdrop.classList.add('mobile-open');
+            });
+        }
+
+        // Mobile Search Toggle
+        const mobileSearchToggle = document.getElementById('mobileSearchToggle');
+        const mobileSearchOverlay = document.getElementById('mobileSearchOverlay');
+        const mobileSearchClose = document.getElementById('mobileSearchClose');
+
+        if (mobileSearchToggle) {
+            mobileSearchToggle.addEventListener('click', function() {
+                mobileSearchOverlay.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            });
+        }
+
+        if (mobileSearchClose) {
+            mobileSearchClose.addEventListener('click', function() {
+                mobileSearchOverlay.classList.remove('show');
+                document.body.style.overflow = '';
+            });
+        }
+
+        if (mobileSearchOverlay) {
+            mobileSearchOverlay.addEventListener('click', function(e) {
+                if (e.target === mobileSearchOverlay) {
+                    mobileSearchOverlay.classList.remove('show');
+                    document.body.style.overflow = '';
+                }
+            });
+        }
+
+        // Search functionality
+        const searchInput = document.querySelector('.search-input');
+        const searchClear = document.querySelector('.search-clear');
+        const mobileSearchInput = document.querySelector('.mobile-search-input');
+        const searchMobileClear = document.querySelector('.search-mobile-clear');
+
+        // Desktop search clear
+        if (searchInput && searchClear) {
+            searchInput.addEventListener('input', function() {
+                searchClear.style.display = this.value ? 'block' : 'none';
+            });
+
+            searchClear.addEventListener('click', function() {
+                searchInput.value = '';
+                searchClear.style.display = 'none';
+                searchInput.focus();
+            });
+        }
+
+        // Mobile search clear
+        if (mobileSearchInput && searchMobileClear) {
+            mobileSearchInput.addEventListener('input', function() {
+                searchMobileClear.style.display = this.value ? 'block' : 'none';
+            });
+
+            searchMobileClear.addEventListener('click', function() {
+                mobileSearchInput.value = '';
+                searchMobileClear.style.display = 'none';
+                mobileSearchInput.focus();
+            });
+        }
+
+        // Search on Enter
+        const searchForms = document.querySelectorAll('.search-input, .mobile-search-input');
+        searchForms.forEach(input => {
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const query = this.value.trim();
+                    if (query) {
+                        window.location.href = `/Search?q=${encodeURIComponent(query)}`;
+                    }
+                }
+            });
+        });
+
+        // Mark all notifications as read
+        const markAllRead = document.querySelector('.mark-all-read');
+        if (markAllRead) {
+            markAllRead.addEventListener('click', function(e) {
+                e.preventDefault();
+                const unreadNotifications = document.querySelectorAll('.notification-item.unread');
+                unreadNotifications.forEach(item => {
+                    item.classList.remove('unread');
+                });
+
+                // Update notification count
+                const notificationCount = document.querySelector('.notification-count');
+                if (notificationCount) {
+                    notificationCount.style.display = 'none';
+                }
+
+                // Send API request to mark all as read
+                fetch('/Notification/MarkAllAsRead', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+            });
+        }
+
+        // Theme toggle
+        const themeSwitch = document.getElementById('themeSwitch');
+        if (themeSwitch) {
+            // Load saved theme
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                themeSwitch.checked = true;
+                document.body.classList.add('dark-theme');
+            }
+
+            themeSwitch.addEventListener('change', function() {
+                if (this.checked) {
+                    document.body.classList.add('dark-theme');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    document.body.classList.remove('dark-theme');
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown')) {
+                document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+                    menu.classList.remove('show');
+                });
+            }
+        });
+
+        // Initialize Bootstrap dropdowns (if using Bootstrap)
+        const dropdowns = document.querySelectorAll('.dropdown-toggle');
+        dropdowns.forEach(dropdown => {
+            dropdown.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const menu = this.nextElementSibling;
+                const isOpen = menu.classList.contains('show');
+
+                // Close all other dropdowns
+                document.querySelectorAll('.dropdown-menu.show').forEach(m => {
+                    if (m !== menu) {
+                        m.classList.remove('show');
+                    }
+                });
+
+                // Toggle current
+                menu.classList.toggle('show', !isOpen);
+            });
+        });
+
+        // Nav scroll effect
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('.top-nav');
+            if (window.scrollY > 20) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+K for search
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                const searchInput = document.querySelector('.search-input');
+                if (searchInput) {
+                    searchInput.focus();
+                } else {
+                    mobileSearchToggle.click();
+                }
+            }
+
+            // Escape to close search
+            if (e.key === 'Escape') {
+                mobileSearchOverlay?.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Load notification count via API
+        function loadNotificationCount() {
+            fetch('/Notification/UnreadCount')
+                .then(response => response.json())
+                .then(data => {
+                    const countElement = document.querySelector('.notification-count');
+                    if (countElement && data.count > 0) {
+                        countElement.textContent = data.count;
+                        countElement.style.display = 'flex';
+                    }
+                })
+                .catch(() => {
+                    // Fallback to static count
+                });
+        }
+
+        // Load message count via API
+        function loadMessageCount() {
+            fetch('/Inbox/UnreadCount')
+                .then(response => response.json())
+                .then(data => {
+                    const countElement = document.querySelector('.message-count');
+                    if (countElement && data.count > 0) {
+                        countElement.textContent = data.count;
+                        countElement.style.display = 'flex';
+                    }
+                })
+                .catch(() => {
+                    // Fallback to static count
+                });
+        }
+
+        // Initialize counts
+        loadNotificationCount();
+        loadMessageCount();
+
+        // Refresh counts every 30 seconds
+        setInterval(() => {
+            loadNotificationCount();
+            loadMessageCount();
+        }, 30000);
+    });
+</script>

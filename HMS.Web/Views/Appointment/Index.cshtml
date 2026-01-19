@@ -1,0 +1,112 @@
+﻿@{
+    ViewData["Title"] = "Appointments";
+    Layout = "_Layout";
+}
+
+<div class="appointments-container">
+    <div class="page-header">
+        <h1 class="page-title">Appointments</h1>
+        <div class="header-actions">
+            <button class="btn btn-primary">
+                <i class="fas fa-plus"></i> New Appointment
+            </button>
+        </div>
+    </div>
+
+    <div class="appointments-layout">
+        <!-- Calendar Section -->
+        <div class="calendar-section">
+            <div class="calendar-card">
+                <div class="calendar-header">
+                    <h3>October 2019</h3>
+                    <div class="calendar-nav">
+                        <button><i class="fas fa-chevron-left"></i></button>
+                        <button class="btn-today">Today</button>
+                        <button><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+                <div class="calendar">
+                    <div class="calendar-weekdays">
+                        <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+                    </div>
+                    <div class="calendar-days">
+                        <!-- Calendar days will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Appointments List -->
+        <div class="appointments-list">
+            <div class="list-header">
+                <h3>Today's Appointments</h3>
+                <div class="list-filters">
+                    <button class="filter-btn active">All (12)</button>
+                    <button class="filter-btn">Pending (3)</button>
+                    <button class="filter-btn">Confirmed (8)</button>
+                    <button class="filter-btn">Completed (1)</button>
+                </div>
+            </div>
+
+            <div class="appointments-timeline">
+                <div class="time-slot">
+                    <div class="time">09:00 AM</div>
+                    <div class="appointment-item">
+                        <div class="appointment-info">
+                            <h4>John Smith</h4>
+                            <p>Cardiology - Dr. Sarah Johnson</p>
+                            <span class="appointment-status confirmed">Confirmed</span>
+                        </div>
+                        <div class="appointment-actions">
+                            <button class="btn-action"><i class="fas fa-phone"></i></button>
+                            <button class="btn-action"><i class="fas fa-edit"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <!-- More time slots... -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Calendar initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCalendar();
+        });
+
+        function initializeCalendar() {
+            const calendarDays = document.querySelector('.calendar-days');
+            const daysInMonth = 31;
+            const startDay = 2; // Tuesday for October 1, 2019
+
+            // Clear calendar
+            calendarDays.innerHTML = '';
+
+            // Add empty days for start of month
+            for(let i = 0; i < startDay; i++) {
+                calendarDays.innerHTML += '<div class="day empty"></div>';
+            }
+
+            // Add days of month
+            for(let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'day';
+                dayElement.textContent = day;
+
+                // Mark today
+                if(day === 14) { // October 14, 2019
+                    dayElement.classList.add('today');
+                }
+
+                // Mark appointments
+                if([2, 7, 14, 21, 28].includes(day)) {
+                    dayElement.classList.add('has-appointments');
+                }
+
+                calendarDays.appendChild(dayElement);
+            }
+        }
+    </script>
+}

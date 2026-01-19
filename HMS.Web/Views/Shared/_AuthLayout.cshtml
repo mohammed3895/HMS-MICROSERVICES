@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Medixus Healthcare</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/hms-theme.css">
+    <style>
+        .auth-layout-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .auth-layout-container::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: url('/images/healthcare-bg.svg') center/cover no-repeat;
+                opacity: 0.05;
+                z-index: 0;
+            }
+
+        .auth-main-content {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .auth-floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .auth-shape {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(0, 102, 255, 0.1);
+            animation: float 20s infinite linear;
+        }
+
+        .auth-shape-1 {
+            width: 80px;
+            height: 80px;
+            top: 20%;
+            left: 10%;
+        }
+
+        .auth-shape-2 {
+            width: 120px;
+            height: 120px;
+            bottom: 15%;
+            right: 5%;
+            animation-delay: -5s;
+            animation-duration: 25s;
+        }
+
+        .auth-shape-3 {
+            width: 60px;
+            height: 60px;
+            top: 40%;
+            right: 15%;
+            animation-delay: -10s;
+            animation-duration: 15s;
+        }
+    </style>
+    @RenderSection("Styles", required: false)
+</head>
+<body>
+    <div class="auth-layout-container">
+        <div class="auth-floating-shapes">
+            <div class="auth-shape auth-shape-1"></div>
+            <div class="auth-shape auth-shape-2"></div>
+            <div class="auth-shape auth-shape-3"></div>
+        </div>
+
+        <main class="auth-main-content">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme detection
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const savedTheme = localStorage.getItem('hms-theme');
+
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+
+            // Floating shapes animation
+            const shapes = document.querySelectorAll('.auth-shape');
+            shapes.forEach((shape, index) => {
+                shape.style.animationDelay = `${index * 5}s`;
+            });
+        });
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,28 @@
+﻿@using HMS.Web.Models.DTOs.Appointment
+@model AppointmentDto
+
+<div class="appointment-card">
+    <div class="card-header">
+        <div class="appointment-date">
+            <div class="day">@Model.AppointmentDate.Day</div>
+            <div class="month">@Model.AppointmentDate.ToString("MMM")</div>
+            <div class="year">@Model.AppointmentDate.Year</div>
+        </div>
+        <div class="appointment-details">
+            <h4>Appointment #@Model.AppointmentId.ToString().Substring(0, 8).ToUpper()</h4>
+            <p class="time">@Model.AppointmentDate.ToString("hh:mm tt")</p>
+        </div>
+        <span class="badge badge-@Model.Status.ToLower()">@Model.Status</span>
+    </div>
+    <div class="card-body">
+        <p>@Model.Notes</p>
+    </div>
+    <div class="card-footer">
+        <a href="@Url.Action("Details", "Appointment", new { id = Model.AppointmentId })" class="btn btn-sm btn-secondary">
+            <i class="fas fa-eye"></i> View Details
+        </a>
+        <a href="@Url.Action("Cancel", "Appointment", new { id = Model.AppointmentId })" class="btn btn-sm btn-danger">
+            <i class="fas fa-trash"></i> Cancel
+        </a>
+    </div>
+</div>

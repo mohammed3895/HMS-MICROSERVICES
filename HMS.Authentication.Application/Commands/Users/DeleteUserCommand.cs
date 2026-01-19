@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using HMS.Common.DTOs;
+using MediatR;
 
 namespace HMS.Authentication.Application.Commands.Users
 {
