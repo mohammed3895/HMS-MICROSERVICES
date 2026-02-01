@@ -39,7 +39,6 @@ namespace HMS.Authentication.Application.Handlers.Roles
                 PhoneNumber = request.PhoneNumber,
                 DateOfBirth = request.DateOfBirth,
                 NationalId = request.NationalId,
-                LicenseNumber = request.LicenseNumber,
                 CreatedAt = DateTime.UtcNow,
                 IsActive = true
             };

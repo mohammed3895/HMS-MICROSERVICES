@@ -1,6 +1,259 @@
-@HMS.Appointment.API_HostAddress = http://localhost:5231
+### HMS Appointment API Test Requests
+@baseUrl = https://localhost:5011
+@doctorId1 = 11111111-1111-1111-1111-111111111111
+@doctorId2 = 22222222-2222-2222-2222-222222222222
+@doctorId3 = 33333333-3333-3333-3333-333333333333
+@doctorId4 = 44444444-4444-4444-4444-444444444444
+@patientId1 = a1111111-1111-1111-1111-111111111111
+@patientId2 = a2222222-2222-2222-2222-222222222222
+@token = YOUR_JWT_TOKEN_HERE
 
-GET {{HMS.Appointment.API_HostAddress}}/weatherforecast/
+### Health Check
+GET {{baseUrl}}/health
+
+###############################################
+# QUERY ENDPOINTS
+###############################################
+
+### Get Available Time Slots for Dr. Sarah Johnson (tomorrow)
+GET {{baseUrl}}/api/appointments/available-slots?doctorId={{doctorId1}}&date=2025-01-25
 Accept: application/json
 
-###
+### Get Available Time Slots for Dr. Michael Chen (today)
+GET {{baseUrl}}/api/appointments/available-slots?doctorId={{doctorId2}}&date=2025-01-24
+Accept: application/json
+
+### Get Patient Appointments - John Smith (All)
+GET {{baseUrl}}/api/appointments/patient/{{patientId1}}
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Get Patient Appointments - John Smith (Filtered by Status)
+GET {{baseUrl}}/api/appointments/patient/{{patientId1}}?status=Completed
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Get Patient Appointments - Emma Davis with Date Range
+GET {{baseUrl}}/api/appointments/patient/{{patientId2}}?fromDate=2025-01-20&toDate=2025-01-30
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Get Doctor's Daily Appointments - Dr. Sarah Johnson (yesterday)
+GET {{baseUrl}}/api/appointments/doctor/{{doctorId1}}/daily?date=2025-01-23
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Get Doctor's Daily Appointments - Dr. James Wilson (today)
+GET {{baseUrl}}/api/appointments/doctor/{{doctorId4}}/daily?date=2025-01-24
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###############################################
+# COMMAND ENDPOINTS
+###############################################
+
+### Create New Appointment
+POST {{baseUrl}}/api/appointments
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "patientId": "{{patientId1}}",
+  "doctorId": "{{doctorId1}}",
+  "appointmentDate": "2025-01-25",
+  "startTime": "14:00:00",
+  "durationMinutes": 30,
+  "appointmentType": "Consultation",
+  "priority": "Normal",
+  "chiefComplaint": "Regular checkup",
+  "notes": "Patient requested afternoon slot",
+  "isInsuranceCovered": true,
+  "insuranceProvider": "Blue Cross",
+  "insurancePolicyNumber": "BC123456"
+}
+
+### Reschedule Appointment
+# First get an appointment ID from the queries above, then use it here
+PUT {{baseUrl}}/api/appointments/APT-2025-000004-ID-HERE/reschedule
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "newAppointmentDate": "2025-01-26",
+  "newStartTime": "10:00:00",
+  "reason": "Patient requested earlier time",
+  "notifyPatient": true
+}
+
+### Cancel Appointment
+PUT {{baseUrl}}/api/appointments/APT-2025-000002-ID-HERE/cancel
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "cancellationReason": "Patient unable to attend",
+  "notifyPatient": true,
+  "allowRefund": true
+}
+
+### Check-in for Appointment
+POST {{baseUrl}}/api/appointments/APPOINTMENT-ID-HERE/check-in
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "checkInMethod": "Receptionist",
+  "additionalNotes": "Patient arrived on time"
+}
+
+### Confirm Appointment
+POST {{baseUrl}}/api/appointments/APPOINTMENT-ID-HERE/confirm
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "confirmationMethod": "Phone"
+}
+
+### Start Consultation (Doctor Only)
+POST {{baseUrl}}/api/appointments/APPOINTMENT-ID-HERE/start-consultation
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "roomNumber": "201"
+}
+
+### Complete Appointment (Doctor Only)
+POST {{baseUrl}}/api/appointments/APPOINTMENT-ID-HERE/complete
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "consultationNotes": "Patient examined. Prescribed medication.",
+  "requiresFollowUp": true,
+  "followUpDate": "2025-02-15"
+}
+
+### Mark as No-Show
+POST {{baseUrl}}/api/appointments/APPOINTMENT-ID-HERE/no-show
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "notes": "Patient did not arrive for scheduled appointment"
+}
+
+### Add to Waitlist
+POST {{baseUrl}}/api/appointments/waitlist
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "patientId": "{{patientId1}}",
+  "doctorId": "{{doctorId2}}",
+  "preferredDate": "2025-01-28",
+  "preferredStartTime": "09:00:00",
+  "preferredEndTime": "12:00:00",
+  "priority": "High",
+  "notes": "Patient prefers morning appointments"
+}
+
+### Send Appointment Reminder
+POST {{baseUrl}}/api/appointments/APPOINTMENT-ID-HERE/send-reminder
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "reminderType": "SMS",
+  "timing": "TwoHours"
+}
+
+###############################################
+# DOCTOR SCHEDULE ENDPOINTS
+###############################################
+
+### Get Doctor Schedule
+GET {{baseUrl}}/api/doctor-schedule/{{doctorId1}}
+Accept: application/json
+
+### Update Doctor Schedule (Admin/Doctor)
+PUT {{baseUrl}}/api/doctor-schedule/{{doctorId1}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "schedule": [
+    {
+      "dayOfWeek": 1,
+      "startTime": "09:00:00",
+      "endTime": "17:00:00",
+      "slotDurationMinutes": 30
+    },
+    {
+      "dayOfWeek": 2,
+      "startTime": "09:00:00",
+      "endTime": "17:00:00",
+      "slotDurationMinutes": 30
+    },
+    {
+      "dayOfWeek": 3,
+      "startTime": "09:00:00",
+      "endTime": "17:00:00",
+      "slotDurationMinutes": 30
+    },
+    {
+      "dayOfWeek": 4,
+      "startTime": "09:00:00",
+      "endTime": "17:00:00",
+      "slotDurationMinutes": 30
+    },
+    {
+      "dayOfWeek": 5,
+      "startTime": "09:00:00",
+      "endTime": "15:00:00",
+      "slotDurationMinutes": 30
+    }
+  ]
+}
+
+### Apply Doctor Leave
+POST {{baseUrl}}/api/doctor-schedule/{{doctorId1}}/leave
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "leaveType": "Vacation",
+  "startDate": "2025-02-10",
+  "endDate": "2025-02-14",
+  "reason": "Family vacation",
+  "rescheduleExistingAppointments": true
+}
+
+### Bulk Reschedule Appointments
+POST {{baseUrl}}/api/doctor-schedule/{{doctorId1}}/bulk-reschedule
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "fromDate": "2025-02-10",
+  "toDate": "2025-02-14",
+  "reason": "Doctor on leave"
+}
+
+###############################################
+# USING SEEDED DATA IDS
+###############################################
+
+### Note: Replace the placeholders above with actual appointment IDs
+### You can get real appointment IDs by running the patient/doctor queries first
+
+### Example: Get John Smith's appointments to find real IDs
+GET {{baseUrl}}/api/appointments/patient/{{patientId1}}
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Example: Get today's appointments for Dr. James Wilson
+GET {{baseUrl}}/api/appointments/doctor/{{doctorId4}}/daily?date=2025-01-24
+Accept: application/json
+Authorization: Bearer {{token}}

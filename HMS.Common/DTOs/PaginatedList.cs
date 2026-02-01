@@ -2,6 +2,14 @@
 {
     public class PaginatedList<T>
     {
+        public PaginatedList(List<T> items, int pageNumer, int totalCount, int pageSize)
+        {
+            Items = items;
+            PageNumber = pageNumer;
+            TotalCount = totalCount;
+            PageSize = pageSize;
+        }
+
         public List<T> Items { get; set; }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }

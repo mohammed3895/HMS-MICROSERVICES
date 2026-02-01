@@ -6,7 +6,6 @@
         Approved = 2,
         Rejected = 3,
         Cancelled = 4,
-        InProgress = 5,
-        Completed = 6
+        InProgress = 5
     }
 }

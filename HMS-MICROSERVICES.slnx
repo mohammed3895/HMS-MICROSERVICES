@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="copy.cs" />
+  </Folder>
   <Folder Name="/src/" />
   <Folder Name="/src/Gateway/">
     <Project Path="APIGateway/APIGateway.csproj" Id="8122ac6f-755e-4bb5-9a85-ece0e5a9c16d" />
@@ -21,12 +24,6 @@
     <Project Path="HMS.Billing.Application/HMS.Billing.Application.csproj" />
     <Project Path="HMS.Billing.Domain/HMS.Billing.Domain.csproj" />
     <Project Path="HMS.Billing.Infrastructure/HMS.Billing.Infrastructure.csproj" />
-  </Folder>
-  <Folder Name="/src/Services/Doctor/">
-    <Project Path="HMS.Doctor.API/HMS.Doctor.API.csproj" />
-    <Project Path="HMS.Doctor.Application/HMS.Doctor.Application.csproj" />
-    <Project Path="HMS.Doctor.Domain/HMS.Doctor.Domain.csproj" />
-    <Project Path="HMS.Doctor.Infrastructure/HMS.Doctor.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/src/Services/Laboratory/">
     <Project Path="HMS.Laboratory.API/HMS.Laboratory.API.csproj" />

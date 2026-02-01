@@ -1,5 +1,6 @@
 ﻿using APIGateway.Middlewares;
 using APIGateway.Services;
+using HMS.APIGateway.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Ocelot.Cache.CacheManager;
@@ -13,22 +14,9 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure Serilog
-Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Information()
-    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-    .MinimumLevel.Override("System", LogEventLevel.Warning)
-    .Enrich.FromLogContext()
-    .Enrich.WithMachineName()
-    .Enrich.WithProperty("Application", "HMS.APIGateway")
-    .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
-    .WriteTo.File(
-        path: "logs/gateway-log-.txt",
-        rollingInterval: RollingInterval.Day,
-        retainedFileCountLimit: 30,
-        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
-    .CreateLogger();
-
+builder.Services.AddLoggingServices(builder.Configuration, builder.Environment);
 builder.Host.UseSerilog();
+
 
 // Add Configuration
 builder.Configuration
@@ -206,19 +194,16 @@ app.UseResponseCompression();
 
 app.UseCors(app.Environment.IsDevelopment() ? "Development" : "Production");
 
-// ✅ ADD CUSTOM MIDDLEWARES (In correct order)
+//  CUSTOM MIDDLEWARES
 app.UseMiddleware<CorrelationIdMiddleware>();
 app.UseMiddleware<RequestLoggingMiddleware>();
 app.UseMiddleware<CircuitBreakerMiddleware>();
 app.UseMiddleware<ApiKeyMiddleware>();
 
-// ✅ CRITICAL: Correct Middleware Order
 app.UseRouting();
 
-// ✅ AUTHENTICATION MUST COME BEFORE AUTHORIZATION
 app.UseAuthentication();
 
-// ✅ AUTHORIZATION MUST COME AFTER AUTHENTICATION
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>

@@ -141,6 +141,9 @@ namespace HMS.Authentication.Infrastructure.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsStaff")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsTwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -154,9 +157,6 @@ namespace HMS.Authentication.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("LicenseNumber")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -196,6 +196,12 @@ namespace HMS.Authentication.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("StaffServiceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("StaffType")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")

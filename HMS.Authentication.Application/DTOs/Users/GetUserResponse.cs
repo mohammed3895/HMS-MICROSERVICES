@@ -11,10 +11,7 @@
         public string? ProfilePictureUrl { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string? NationalId { get; set; }
-        public string? LicenseNumber { get; set; }
         public bool IsActive { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime? LastLoginAt { get; set; }
         public List<string> Roles { get; set; }
     }
 }

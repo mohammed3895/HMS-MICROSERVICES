@@ -1,4 +1,5 @@
 ﻿using HMS.Authentication.Application.Commands.Users;
+using HMS.Authentication.Application.Queries.Users;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,17 @@ namespace HMS.Authentication.API.Controllers
         public UsersController(IMediator mediator)
         {
             _mediator = mediator;
+        }
+
+        [HttpGet("{userId}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetUserById(Guid userId)
+        {
+            GetUserByIdQuery query = new() { UserId = userId };
+            var result = await _mediator.Send(query);
+            return result.IsSuccess
+                ? Ok(result)
+                : NotFound();
         }
 
         [HttpPost]

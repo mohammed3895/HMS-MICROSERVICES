@@ -4,12 +4,11 @@
     {
         Annual = 1,
         Sick = 2,
-        Casual = 3,
+        Emergency = 3,
         Maternity = 4,
         Paternity = 5,
-        Emergency = 6,
-        Unpaid = 7,
-        Compensatory = 8,
-        Study = 9
+        Study = 6,
+        Compensatory = 7,
+        Unpaid = 8
     }
 }
