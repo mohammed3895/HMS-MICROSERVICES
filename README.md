@@ -879,8 +879,11 @@ dotnet ef migrations remove -p HMS.ServiceName.Infrastructure -s HMS.ServiceName
 - [WebAuthn Guide](https://webauthn.guide)
 - [FIDO2 .NET Library](https://github.com/passwordless-lib/fido2-net-lib)
 
-### Project Contacts
-- **Technical Support**: [Mohammed Sameer](mammado89@gmail.com)
+**Technical Support:**
+```
+Email: mammado89@gmail.com
+For: Bug reports, technical issues, API questions
+```
 
 ---
 
